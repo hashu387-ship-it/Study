@@ -147,6 +147,7 @@ export type AppState = {
   cases: CaseStudy[];
   announcements: Announcement[];
   unread: number;
+  meetingUrl: string;
   serverTime: string;
 };
 

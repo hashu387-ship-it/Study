@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, Globe } from 'lucide-react';
+import { Clock, Globe, Video } from 'lucide-react';
 import { fmtDate, sessionTimes, todayInGroup } from '@/lib/time';
 import type { AppState, Session } from '@/lib/types';
 
@@ -82,5 +82,24 @@ export function SessionRow({ session, onClick }: { session: Session; onClick?: (
     </button>
   ) : (
     <div className="list-item">{content}</div>
+  );
+}
+
+export function meetingLabel(url: string) {
+  try {
+    const host = new URL(url).hostname;
+    if (host.endsWith('teams.microsoft.com') || host.endsWith('teams.live.com')) return 'Join on Teams';
+    if (host.endsWith('zoom.us')) return 'Join on Zoom';
+    if (host === 'meet.google.com') return 'Join on Google Meet';
+  } catch {}
+  return 'Join meeting';
+}
+
+export function JoinButton({ url, small }: { url: string; small?: boolean }) {
+  if (!url) return null;
+  return (
+    <a className={'btn primary' + (small ? ' small' : '')} href={url} target="_blank" rel="noreferrer" style={{ textDecoration: 'none' }}>
+      <Video size={16} /> {meetingLabel(url)}
+    </a>
   );
 }

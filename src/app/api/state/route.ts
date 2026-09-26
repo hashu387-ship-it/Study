@@ -11,7 +11,7 @@ const words = (text: string) => (text.trim() ? text.trim().split(/\s+/).length :
 export const GET = handle(async () => {
   const client = db();
   const [me, device] = await Promise.all([currentMember(), deviceId()]);
-  const [members, sessions, attendance, soeRows, qa, caseRows, announcements, reads, lastRead] = await Promise.all([
+  const [members, sessions, attendance, soeRows, qa, caseRows, announcements, reads, lastRead, meeting] = await Promise.all([
     client.from('members').select('id,name,pathway,notes,status,is_leader,sort,revision').order('sort'),
     client
       .from('sessions')
@@ -35,6 +35,7 @@ export const GET = handle(async () => {
     client.from('announcements').select('id,member_id,title,body,created_at').order('created_at', { ascending: false }).limit(50),
     client.from('announcement_reads').select('announcement_id,member_id'),
     device ? client.from('notice_reads').select('read_at').eq('device_id', device).maybeSingle() : Promise.resolve({ data: null, error: null }),
+    client.from('settings').select('value').eq('key', 'meeting_url').maybeSingle(),
   ]);
 
   const soeData = must(soeRows) as Record<string, any>[];
@@ -83,6 +84,7 @@ export const GET = handle(async () => {
       seen_by: readRows.filter((r) => r.announcement_id === a.id).map((r) => r.member_id),
     })),
     unread: unread.count ?? 0,
+    meetingUrl: (maybe(meeting) as { value: string } | null)?.value ?? '',
     serverTime: new Date().toISOString(),
   };
   return json(state);

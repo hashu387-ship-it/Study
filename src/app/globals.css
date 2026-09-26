@@ -2058,3 +2058,7 @@ table.table {
     transition-duration: 1ms !important;
   }
 }
+
+.row > .field {
+  flex: 1 1 260px;
+}

@@ -4,7 +4,7 @@ import { ArrowRight, BookOpen, CalendarDays, ClipboardCheck, Megaphone, MessageC
 import { fmtDate } from '@/lib/time';
 import { useHub } from '../hub';
 import { Avatar, Empty, PageHead } from '../ui';
-import { KIND_LABELS, nextWorkshop, SessionRow, SessionWhen, upcomingSessions, WORKSHOP_TARGET } from './shared';
+import { JoinButton, KIND_LABELS, nextWorkshop, SessionRow, SessionWhen, upcomingSessions, WORKSHOP_TARGET } from './shared';
 
 export function Overview() {
   const { state, me, go, member, name } = useHub();
@@ -47,9 +47,12 @@ export function Overview() {
               <SessionWhen session={next} />
             </div>
             <p>{next.notes || KIND_LABELS[next.kind]}</p>
-            <button className="btn yellow" onClick={() => go('calendar')}>
-              Open calendar <ArrowRight size={17} />
-            </button>
+            <div className="row">
+              <JoinButton url={state.meetingUrl} />
+              <button className={'btn' + (state.meetingUrl ? '' : ' yellow')} onClick={() => go('calendar')}>
+                Open calendar <ArrowRight size={17} />
+              </button>
+            </div>
           </section>
         ) : (
           <section className="hero">

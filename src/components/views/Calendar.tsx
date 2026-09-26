@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, ClipboardCheck, Download, Plus, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ClipboardCheck, Download, Link2, Plus, Trash2 } from 'lucide-react';
 import { api } from '@/lib/client/api';
 import { fmtDate, GROUP_LABEL, GROUP_TZ, localTz, monthLabel, sameAsGroup, shiftMonth, toInstant, todayInGroup, wallTime } from '@/lib/time';
 import type { Session } from '@/lib/types';
 import { attempt, useHub } from '../hub';
 import { Empty, Field, PageHead, Select, Sheet } from '../ui';
-import { KIND_LABELS, SessionRow } from './shared';
+import { JoinButton, KIND_LABELS, SessionRow } from './shared';
 
 type Draft = {
   id?: string;
@@ -41,13 +41,15 @@ function toDraft(s: Session | null, date: string): Draft {
   };
 }
 
-function exportIcs(sessions: Session[]) {
+function exportIcs(sessions: Session[], meetingUrl: string) {
   const esc = (s: string) => s.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/,/g, '\\,').replace(/;/g, '\\;');
   const stamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//RICS Group 03//Study Hub//EN', 'CALSCALE:GREGORIAN'];
   for (const s of sessions) {
     lines.push('BEGIN:VEVENT', `UID:${s.id}@rics-group-03`, `DTSTAMP:${stamp(new Date().toISOString())}`, `SUMMARY:${esc(s.title)}`);
-    if (s.notes) lines.push(`DESCRIPTION:${esc(s.notes)}`);
+    const description = [s.notes, meetingUrl && `Join: ${meetingUrl}`].filter(Boolean).join('\n\n');
+    if (description) lines.push(`DESCRIPTION:${esc(description)}`);
+    if (meetingUrl) lines.push(`URL:${meetingUrl}`, `LOCATION:${esc(meetingUrl)}`);
     if (s.starts_at) {
       lines.push(`DTSTART:${stamp(s.starts_at)}`);
       const end = s.ends_at ?? (s.hours ? new Date(Date.parse(s.starts_at) + s.hours * 3600_000).toISOString() : null);
@@ -162,7 +164,7 @@ export function Calendar() {
               onClick={() => {
                 const planned = state.sessions.filter((s) => s.status === 'Planned');
                 if (!planned.length) return hub.toast('There are no planned sessions to export.', 'error');
-                exportIcs(planned);
+                exportIcs(planned, state.meetingUrl);
                 hub.toast('Calendar file downloaded. Open it to add the sessions to your phone calendar.');
               }}
             >
@@ -174,6 +176,8 @@ export function Calendar() {
           </div>
         }
       />
+
+      <MeetingLink />
 
       <div className="toolbar">
         <button className="icon-btn" onClick={() => setMonth(shiftMonth(month, -1))} aria-label="Previous month">
@@ -258,9 +262,12 @@ export function Calendar() {
                 <h3>{fmtDate(selected, { weekday: 'long', day: 'numeric', month: 'long' })}</h3>
                 <p>{selectedSessions.length ? `${selectedSessions.length} session${selectedSessions.length > 1 ? 's' : ''}` : 'Nothing planned'}</p>
               </div>
-              <button className="btn small" onClick={() => open(null, selected)}>
-                <Plus size={16} /> Add
-              </button>
+              <div className="row">
+                {selectedSessions.some((s) => s.status === 'Planned') && <JoinButton url={state.meetingUrl} small />}
+                <button className="btn small" onClick={() => open(null, selected)}>
+                  <Plus size={16} /> Add
+                </button>
+              </div>
             </div>
             <div className="list">
               {selectedSessions.map((s) => (
@@ -381,5 +388,73 @@ export function Calendar() {
         )}
       </Sheet>
     </>
+  );
+}
+
+// One meeting link for every session, set once by anyone in the group.
+function MeetingLink() {
+  const hub = useHub();
+  const { state, reload } = hub;
+  const [value, setValue] = useState(state.meetingUrl);
+  const [editing, setEditing] = useState(!state.meetingUrl);
+  const [busy, setBusy] = useState(false);
+
+  async function save() {
+    setBusy(true);
+    const ok = await attempt(
+      hub,
+      async () => {
+        await api('/api/settings', { method: 'PATCH', body: { meeting_url: value.trim() } });
+        await reload();
+      },
+      value.trim() ? 'Meeting link saved for every session.' : 'Meeting link removed.',
+    );
+    setBusy(false);
+    if (ok) setEditing(!value.trim());
+  }
+
+  return (
+    <section className="card" style={{ marginBottom: 32 }}>
+      <div className="card-head" style={{ marginBottom: editing ? 20 : 0 }}>
+        <div>
+          <div className="eyebrow">Meeting link</div>
+          <h3>One link for every session</h3>
+          <p>
+            {state.meetingUrl
+              ? 'Everyone joins every session from the same link, on Home and in the calendar.'
+              : 'Create a recurring meeting in Teams, copy its join link, and paste it here.'}
+          </p>
+        </div>
+        {!editing && (
+          <div className="row">
+            <JoinButton url={state.meetingUrl} small />
+            <button className="btn small" onClick={() => setEditing(true)}>
+              <Link2 size={16} /> Change
+            </button>
+          </div>
+        )}
+      </div>
+      {editing && (
+        <div className="row" style={{ alignItems: 'flex-end' }}>
+          <Field label="Join link">
+            <input
+              type="url"
+              inputMode="url"
+              placeholder="https://teams.microsoft.com/l/meetup-join/..."
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </Field>
+          <button className="btn primary" onClick={save} disabled={busy || value.trim() === state.meetingUrl}>
+            {busy ? 'Saving…' : 'Save link'}
+          </button>
+          {state.meetingUrl && (
+            <button className="btn" onClick={() => { setValue(state.meetingUrl); setEditing(false); }} disabled={busy}>
+              Cancel
+            </button>
+          )}
+        </div>
+      )}
+    </section>
   );
 }

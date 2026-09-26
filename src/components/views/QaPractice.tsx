@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { QaArt } from '../illustrations';
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, MessageCircleQuestion, Plus } from 'lucide-react';
 import { api } from '@/lib/client/api';
@@ -38,6 +40,9 @@ export function QaPractice() {
         title="Q&A practice"
         text="You see the questions you write for others, and the questions others write for you. The questioner writes each question, the candidate answers it, and both can leave feedback."
       />
+      <Tip id="qa" art={QaArt} title="Ask and answer">
+        The questioner writes each question. The candidate answers in four parts: context, action, RICS basis, outcome. Both of you can leave feedback.
+      </Tip>
 
       {focus && (
         <div className="toolbar">

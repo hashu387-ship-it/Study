@@ -4,6 +4,7 @@ import { useEffect, useRef, type ReactNode } from 'react';
 import { Download, FileText, Image as ImageIcon, X } from 'lucide-react';
 import { fileUrl, formatSize } from '@/lib/client/api';
 import type { FileRef, Member } from '@/lib/types';
+import { EmptyArt } from './illustrations';
 
 export function initials(name: string) {
   return name
@@ -170,10 +171,11 @@ export function FileChip({ file, onRemove }: { file: FileRef | { name: string; s
   return <span className="file-chip">{body}</span>;
 }
 
-export function Empty({ icon, children }: { icon?: ReactNode; children: ReactNode }) {
+// Empty screens show a small line drawing; pass art={false} for tight spaces.
+export function Empty({ children, art = true }: { icon?: ReactNode; art?: boolean; children: ReactNode }) {
   return (
     <div className="empty">
-      {icon}
+      {art && <EmptyArt size={140} />}
       <div>{children}</div>
     </div>
   );

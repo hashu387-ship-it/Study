@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { AttendanceArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
 import { ClipboardCheck, Copy, UserX } from 'lucide-react';
 import { api } from '@/lib/client/api';
@@ -90,6 +92,9 @@ export function Attendance() {
         title="Attendance"
         text="Mark who attended each session. Anyone in the group can take or correct the register."
       />
+      <Tip id="attendance" art={AttendanceArt} title="Take the register">
+        Pick a session, then tap Present, Late, Excused or Absent beside each name. Copy the summary to share it in WhatsApp.
+      </Tip>
 
       <section className="card" style={{ marginBottom: 22 }}>
         <div className="form" style={{ marginBottom: 18 }}>

@@ -2034,3 +2034,167 @@ table.table {
 .row > .field {
   flex: 1 1 260px;
 }
+
+/* ---------- Illustrations and guide ---------- */
+
+.illo {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.illo [pathLength] {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: ink var(--dur-cinematic) var(--ease-quiet) forwards;
+}
+
+.illo g:nth-child(2) [pathLength] {
+  animation-delay: var(--dur-stagger);
+}
+
+.illo g:nth-child(3) [pathLength] {
+  animation-delay: calc(var(--dur-stagger) * 2);
+}
+
+.illo g:nth-child(n + 4) [pathLength] {
+  animation-delay: calc(var(--dur-stagger) * 3);
+}
+
+@keyframes ink {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.illo text {
+  animation: rise var(--dur-slow) var(--ease-quiet) var(--dur-slow) both;
+}
+
+.cycle .cycle-ring {
+  animation-duration: 2400ms;
+}
+
+.cycle-node {
+  animation: rise var(--dur-slow) var(--ease-quiet) both;
+}
+
+.tour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  padding: 8px 0 4px;
+}
+
+.tour p {
+  font-size: 18px;
+  line-height: 28px;
+  max-width: 46ch;
+  animation: rise var(--dur-slow) var(--ease-quiet) var(--dur-stagger) both;
+}
+
+.tour-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.tour-dots i {
+  width: 24px;
+  height: 2px;
+  background: var(--line);
+  transition: background var(--dur-base) var(--ease-glide);
+}
+
+.tour-dots i.on {
+  background: var(--bronze);
+}
+
+.tip {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--bronze);
+  animation: rise var(--dur-slow) var(--ease-quiet) calc(var(--dur-stagger) * 3) both;
+}
+
+.tip > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.tip strong {
+  display: block;
+  font-family: var(--font-display-stack);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+  margin: 4px 0 6px;
+}
+
+.tip p {
+  color: var(--ink-muted);
+  max-width: 70ch;
+}
+
+.tip .icon-btn {
+  align-self: flex-start;
+}
+
+@media (max-width: 640px) {
+  .tip {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .tip .illo {
+    width: 96px;
+  }
+}
+
+.how-cycle {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cycle-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 18px;
+}
+
+.cycle-legend li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cycle-legend .medallion {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+
+.how-step .illo {
+  align-self: center;
+}
+
+.how-step strong {
+  font-family: var(--font-display-stack);
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 600;
+}

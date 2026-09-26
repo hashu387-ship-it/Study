@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { AlertArt } from '../illustrations';
 import { useEffect, useRef, useState } from 'react';
 import { BellRing, Copy, Megaphone, Plus, Trash2 } from 'lucide-react';
 import { api } from '@/lib/client/api';
@@ -57,6 +59,9 @@ export function Announcements() {
           </button>
         }
       />
+      <Tip id="announcements" art={AlertArt} title="Group notices">
+        Opening this page marks announcements as seen. Nudge the rest sends a phone alert to anyone who has not opened one yet.
+      </Tip>
 
       <div className="grid">
         {state.announcements.map((a) => {

@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { SessionArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, ClipboardCheck, Download, Link2, Plus, Trash2 } from 'lucide-react';
 import { api } from '@/lib/client/api';
@@ -176,6 +178,9 @@ export function Calendar() {
           </div>
         }
       />
+      <Tip id="calendar" art={SessionArt} title="Every session, one link">
+        Sessions run Sunday, Tuesday and Wednesday, 8:00 – 9:30 pm GST. Tap Join on Teams on the day, or add the sessions to your phone calendar.
+      </Tip>
 
       <MeetingLink />
 

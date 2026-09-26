@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { SoeArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
 import { ArrowUpRight, BookOpen, Check, MessageCircleQuestion, Plus, Send, Trash2 } from 'lucide-react';
 import { api, uploadFile } from '@/lib/client/api';
@@ -39,6 +41,9 @@ export function Soe() {
           </button>
         }
       />
+      <Tip id="soe" art={SoeArt} title="Your statements of experience">
+        Open your competency, upload a PDF, Word file or photo, or paste your text. Check the converted text, then submit. Only you can change your own SOE.
+      </Tip>
 
       <div className="chips" role="group" aria-label="Filter by competency">
         <button className="chip" aria-pressed={competency === 'all'} onClick={() => setCompetency('all')}>

@@ -13,7 +13,8 @@ export type View =
   | 'cases'
   | 'posts'
   | 'alerts'
-  | 'members';
+  | 'members'
+  | 'guide';
 
 export type Hub = {
   state: AppState;

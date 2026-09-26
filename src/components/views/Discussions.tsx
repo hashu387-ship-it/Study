@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { QaArt } from '../illustrations';
 import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft, MessagesSquare, Paperclip, Plus, RefreshCw, Send, Trash2 } from 'lucide-react';
 import { api, checkFile, fileUrl, uploadFile } from '@/lib/client/api';
@@ -229,6 +231,9 @@ export function Discussions() {
           </button>
         }
       />
+      <Tip id="posts" art={QaArt} title="Ask the group">
+        Post a question, file or photo. Anyone can reply, including you on your own post.
+      </Tip>
       {error && <p className="error">{error}</p>}
       <div className="grid">
         {posts?.map((p) => (

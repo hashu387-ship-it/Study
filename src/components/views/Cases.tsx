@@ -1,5 +1,7 @@
 'use client';
 
+import { Tip } from '../guide';
+import { EmptyArt } from '../illustrations';
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, Presentation, Upload } from 'lucide-react';
 import { api, checkFile, uploadFile } from '@/lib/client/api';
@@ -31,6 +33,9 @@ export function Cases() {
         title="Case studies"
         text="Share your case study, mark your presentation as ready for the workshop, and ask each other questions."
       />
+      <Tip id="cases" art={EmptyArt} title="Case studies and presentations">
+        Share your case study and mark your presentation Ready when you can present it. The workshop needs at least 2 from the group.
+      </Tip>
 
       <section className="card" style={{ marginBottom: 22 }}>
         <div className="card-head">

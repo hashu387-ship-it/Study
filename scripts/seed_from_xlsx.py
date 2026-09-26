@@ -81,13 +81,16 @@ def main(path):
         )
 
     # Study sessions run on Sunday, Tuesday and Wednesday, 8:00 to 9:30 pm UAE / Oman time.
+    # Study days in the plan without a topic yet get a placeholder session.
     for row in wb["02- Calander"].iter_rows(min_row=4, max_col=5, values_only=True):
         day, _weekday, topic, hours, notes = row
-        if not text(topic):
+        if not day:
             continue
-        title = text(topic)
-        iso = day.date().isoformat()
         timed = day.weekday() in STUDY_DAYS
+        if not text(topic) and not timed:
+            continue
+        title = text(topic) or "Study session (topic TBC)"
+        iso = day.date().isoformat()
         starts = q(f"{iso}T{STUDY_START}:00{UAE_OFFSET}") if timed else "null"
         ends = q(f"{iso}T{STUDY_END}:00{UAE_OFFSET}") if timed else "null"
         planned = 1.5 if timed else (None if hours in (None, "") else float(hours))

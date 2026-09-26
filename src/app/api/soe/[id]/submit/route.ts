@@ -66,7 +66,7 @@ export const POST = handle(async (req: Request, { params }: { params: Promise<{ 
     kind: 'soe',
     ref: id,
     title: `${me.name} submitted SOE`,
-    body: current.competency,
+    body: `${current.competency}. Open it to ask a question.`,
     actor: me.memberId,
     url: `/?view=soe&record=${id}`,
   });

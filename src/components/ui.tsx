@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, type ReactNode } from 'react';
-import { Download, FileText, Image as ImageIcon, X } from 'lucide-react';
-import { fileUrl, formatSize } from '@/lib/client/api';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { Eye, FileText, Image as ImageIcon, X } from 'lucide-react';
+import { formatSize } from '@/lib/client/api';
 import type { FileRef, Member } from '@/lib/types';
+import { FilePreview } from './FilePreview';
 import { EmptyArt } from './illustrations';
 
 export function initials(name: string) {
@@ -141,14 +142,19 @@ export function StatusBadge({ status }: { status: string }) {
   return <span className={'badge ' + tone}>{status}</span>;
 }
 
-export function FileChip({ file, onRemove }: { file: FileRef | { name: string; size: number; content_type?: string; id?: string }; onRemove?: () => void }) {
+type ChipFile = FileRef | { name: string; size: number; content_type?: string; id?: string };
+
+// Saved files open in a preview rather than downloading.
+export function FileChip({ file, onRemove }: { file: ChipFile; onRemove?: () => void }) {
+  const [open, setOpen] = useState(false);
   const isImage = file.content_type?.startsWith('image/');
+  const saved = !onRemove && 'id' in file && file.id ? (file as FileRef) : null;
   const body = (
     <>
       {isImage ? <ImageIcon size={15} /> : <FileText size={15} />}
       <span>{file.name}</span>
       <small className="muted">{formatSize(file.size)}</small>
-      {'id' in file && file.id && !onRemove && <Download size={14} />}
+      {saved && <Eye size={14} />}
     </>
   );
   if (onRemove) {
@@ -161,14 +167,36 @@ export function FileChip({ file, onRemove }: { file: FileRef | { name: string; s
       </span>
     );
   }
-  if ('id' in file && file.id) {
+  if (saved) {
     return (
-      <a className="file-chip" href={fileUrl(file.id)} target="_blank" rel="noreferrer">
-        {body}
-      </a>
+      <>
+        <button type="button" className="file-chip" onClick={() => setOpen(true)} title={`Preview ${file.name}`}>
+          {body}
+        </button>
+        {open && <PreviewSheet file={saved} onClose={() => setOpen(false)} />}
+      </>
     );
   }
   return <span className="file-chip">{body}</span>;
+}
+
+export function PreviewSheet({ file, onClose }: { file: FileRef; onClose: () => void }) {
+  return (
+    <Sheet open onClose={onClose} title={file.name} subtitle={formatSize(file.size)}>
+      <FilePreview file={file} tall />
+    </Sheet>
+  );
+}
+
+// An inline preview with a button to see it full size.
+export function FileView({ file }: { file: FileRef }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <FilePreview file={file} onExpand={() => setOpen(true)} />
+      {open && <PreviewSheet file={file} onClose={() => setOpen(false)} />}
+    </>
+  );
 }
 
 // Empty screens show a small line drawing; pass art={false} for tight spaces.

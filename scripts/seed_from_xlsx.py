@@ -64,10 +64,9 @@ def main(path):
         levels = [text(sheet.cell(row + i, 5).value) for i in range(3)]
         status = text(sheet.cell(row, 7).value) or "Not Started"
         out.append(
-            "with s as (insert into public.soe (member_id, competency, competency_type, level1, level2, level3, status, notes) values "
+            "insert into public.soe (member_id, competency, competency_type, level1, level2, level3, status, notes) values "
             f"({q(members[candidate])}, {q(competency)}, {q(text(sheet.cell(row, 3).value) or 'Technical')}, "
-            f"{q(levels[0])}, {q(levels[1])}, {q(levels[2])}, {q(status)}, {q(text(sheet.cell(row, 8).value))}) returning id) "
-            "insert into public.qa (soe_id, number) select s.id, n from s, generate_series(1, 3) n;"
+            f"{q(levels[0])}, {q(levels[1])}, {q(levels[2])}, {q(status)}, {q(text(sheet.cell(row, 8).value))});"
         )
 
     for row in wb["04- Case study"].iter_rows(min_row=5, max_col=5, values_only=True):

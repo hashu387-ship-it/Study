@@ -1,4 +1,4 @@
-import { check, db, maybe, must } from '@/lib/server/db';
+import { db, maybe, must } from '@/lib/server/db';
 import { fail, handle, json, oneOf, readJson, str } from '@/lib/server/http';
 import { requireMember } from '@/lib/server/identity';
 
@@ -25,6 +25,5 @@ export const POST = handle(async (req: Request) => {
       .select('id')
       .single(),
   );
-  check(await db().from('qa').insert([1, 2, 3].map((number) => ({ soe_id: row.id, number }))));
   return json({ id: row.id }, 201);
 });

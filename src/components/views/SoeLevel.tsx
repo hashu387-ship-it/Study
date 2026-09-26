@@ -5,7 +5,7 @@ import { Check, FileText, LoaderCircle, Upload, X } from 'lucide-react';
 import { checkFile } from '@/lib/client/api';
 import { extractText } from '@/lib/client/extract';
 import type { FileRef } from '@/lib/types';
-import { FileChip } from '../ui';
+import { FileChip, FileView } from '../ui';
 
 const TITLES = ['', 'Knowledge and understanding', 'Application of knowledge', 'Reasoned advice'];
 
@@ -27,6 +27,7 @@ export function SoeLevel({
   disabled?: boolean;
 }) {
   const [busy, setBusy] = useState(false);
+  const [showOriginal, setShowOriginal] = useState(true);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [preview, setPreview] = useState<{ text: string; file: File; method: string } | null>(null);
@@ -166,9 +167,12 @@ export function SoeLevel({
         {pending ? (
           <FileChip file={{ name: pending.name, size: pending.size }} onRemove={() => onPending(null)} />
         ) : file ? (
-          <FileChip file={file} />
+          <button type="button" className="link-btn" onClick={() => setShowOriginal(!showOriginal)} aria-expanded={showOriginal}>
+            {showOriginal ? 'Hide original file' : 'Show original file'}
+          </button>
         ) : null}
       </div>
+      {file && !pending && showOriginal && <FileView file={file} />}
     </section>
   );
 }

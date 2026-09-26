@@ -78,6 +78,8 @@ export type Qa = {
   id: string;
   soe_id: string;
   number: number;
+  level: 1 | 2 | 3 | null;
+  asked_by: string | null;
   question: string;
   context: string;
   action: string;

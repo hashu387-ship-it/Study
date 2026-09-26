@@ -4,6 +4,7 @@ import { ArrowRight, BookOpen, CalendarDays, ClipboardCheck, Megaphone, MessageC
 import { fmtDate } from '@/lib/time';
 import { useHub } from '../hub';
 import { Avatar, Empty, PageHead } from '../ui';
+import { answered } from './QaPractice';
 import { JoinButton, KIND_LABELS, nextWorkshop, SessionRow, SessionWhen, upcomingSessions, WORKSHOP_TARGET } from './shared';
 
 export function Overview() {
@@ -26,8 +27,8 @@ export function Overview() {
   const mySoe = state.soe.filter((s) => s.member_id === me.memberId);
   const myMissing = mySoe.filter((s) => s.words.some((w) => w === 0));
   const myCase = state.cases.find((c) => c.member_id === me.memberId);
-  const soeIds = new Set(state.soe.filter((s) => s.questioner_id === me.memberId).map((s) => s.id));
-  const myQuestions = state.qa.filter((q) => soeIds.has(q.soe_id) && !q.question.trim());
+  const soeIds = new Set(mySoe.map((s) => s.id));
+  const myQuestions = state.qa.filter((q) => soeIds.has(q.soe_id) && !answered(q));
   const firstName = me.name.split(' ')[0];
 
   return (
@@ -167,13 +168,15 @@ export function Overview() {
               </button>
             )}
             {myQuestions.length > 0 && (
-              <button className="list-item" onClick={() => go('qa', { mine: 'questioner' })}>
+              <button className="list-item" onClick={() => go('qa')}>
                 <span className="stat-icon" style={{ margin: 0 }}>
                   <MessageCircleQuestion size={18} />
                 </span>
                 <div>
-                  <strong>Write practice questions</strong>
-                  <small>{myQuestions.length} questions are waiting for you as questioner</small>
+                  <strong>Answer the group's questions</strong>
+                  <small>
+                    {myQuestions.length === 1 ? '1 question on your SOE is' : `${myQuestions.length} questions on your SOE are`} waiting for your answer
+                  </small>
                 </div>
                 <ArrowRight size={17} />
               </button>

@@ -3,17 +3,19 @@
 import { Tip } from '../guide';
 import { SoeArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowUpRight, BookOpen, Check, MessageCircleQuestion, Plus, Send, Trash2 } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Check, Plus, Send, Trash2 } from 'lucide-react';
 import { api, uploadFile } from '@/lib/client/api';
 import { fmtDateTime } from '@/lib/time';
 import { COMPETENCIES, REVIEW_STATUSES, type SoeFull, type SoeSummary } from '@/lib/types';
 import { attempt, useHub } from '../hub';
 import { Avatar, Empty, Field, PageHead, Select, Sheet, StatusBadge } from '../ui';
 import { SoeLevel } from './SoeLevel';
+import { questionCount, SoeQuestions } from './QaPractice';
 
 export function Soe() {
   const hub = useHub();
   const { state, me, params, member, name } = hub;
+  const asked = (id: string) => state.qa.filter((q) => q.soe_id === id).length;
   const competencies = useMemo(() => [...new Set(state.soe.map((s) => s.competency))], [state.soe]);
   const [competency, setCompetency] = useState('all');
   const [candidate, setCandidate] = useState('all');
@@ -92,7 +94,7 @@ export function Soe() {
             </div>
             <div className="record-foot">
               <StatusBadge status={s.status} />
-              <span>{s.questioner_id ? `Questioner: ${name(s.questioner_id)}` : 'No questioner yet'}</span>
+              <span>{s.submitted_at ? questionCount(asked(s.id)) : 'Not submitted yet'}</span>
             </div>
             {s.member_id === me.memberId && !s.words.every((w) => w) && <span className="badge yellow">Yours · add your SOE</span>}
           </button>
@@ -112,11 +114,11 @@ export function Soe() {
 
 function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onClose: () => void }) {
   const hub = useHub();
-  const { state, me, name, reload, go } = hub;
+  const { me, name, reload } = hub;
   const [record, setRecord] = useState<SoeFull | null>(null);
   const [texts, setTexts] = useState<[string, string, string]>(['', '', '']);
   const [pending, setPending] = useState<[File | null, File | null, File | null]>([null, null, null]);
-  const [details, setDetails] = useState({ competency_type: 'Technical', questioner_id: '', status: 'Not Started', notes: '' });
+  const [details, setDetails] = useState({ competency_type: 'Technical', status: 'Not Started', notes: '' });
   const [busy, setBusy] = useState<'submit' | 'details' | null>(null);
   const [error, setError] = useState('');
 
@@ -126,7 +128,7 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
     setRecord(full);
     setTexts([full.level1, full.level2, full.level3]);
     setPending([null, null, null]);
-    setDetails({ competency_type: full.competency_type, questioner_id: full.questioner_id ?? '', status: full.status, notes: full.notes });
+    setDetails({ competency_type: full.competency_type, status: full.status, notes: full.notes });
   };
 
   useEffect(() => {
@@ -137,7 +139,6 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
   const mine = summary.member_id === me.memberId;
   const canDelete = mine || me.isLeader;
   const dirty = record && (texts[0] !== record.level1 || texts[1] !== record.level2 || texts[2] !== record.level3 || pending.some(Boolean));
-  const questions = state.qa.filter((q) => q.soe_id === summary.id);
 
   async function submit() {
     if (!record) return;
@@ -164,7 +165,7 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
     try {
       await api(`/api/soe/${record.id}`, {
         method: 'PATCH',
-        body: { ...details, questioner_id: details.questioner_id || null, revision: record.revision },
+        body: { ...details, revision: record.revision },
       });
       await Promise.all([reload(), load()]);
       hub.toast('Details saved.');
@@ -207,9 +208,6 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
               <Trash2 size={17} /> Remove
             </button>
           )}
-          <button className="btn" onClick={() => go('qa', { soe: summary.id })} disabled={busy !== null}>
-            <MessageCircleQuestion size={17} /> Questions ({questions.length})
-          </button>
           <span className="spacer" />
           {mine && (
             <button className="btn primary" onClick={submit} disabled={busy !== null || !record || !dirty}>
@@ -225,7 +223,10 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
         <div className="grid" style={{ gap: 18 }}>
           {!mine && (
             <p className="note">
-              Only {name(summary.member_id)} can change this SOE text. You can still set the questioner, review status and notes below.
+              Only {name(summary.member_id)} can change this SOE text.{' '}
+              {summary.submitted_at
+                ? 'Scroll down to ask them one question on each level.'
+                : 'Once they submit it, you can ask them one question on each level.'}
             </p>
           )}
           {([1, 2, 3] as const).map((level) => (
@@ -241,6 +242,8 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
             />
           ))}
 
+          <SoeQuestions soe={summary} />
+
           <section className="soe-level">
             <h3>Record details</h3>
             <div className="form">
@@ -249,16 +252,6 @@ function SoeEditor({ summary, onClose }: { summary: SoeSummary | undefined; onCl
                   value={details.competency_type}
                   onChange={(v) => setDetails({ ...details, competency_type: v })}
                   options={['Technical', 'Mandatory', 'Optional']}
-                />
-              </Field>
-              <Field label="Questioner" hint="Writes 3 practice questions for this competency.">
-                <Select
-                  value={details.questioner_id}
-                  onChange={(v) => setDetails({ ...details, questioner_id: v })}
-                  options={[
-                    { value: '', label: 'Not assigned' },
-                    ...state.members.filter((m) => m.id !== summary.member_id).map((m) => ({ value: m.id, label: m.name })),
-                  ]}
                 />
               </Field>
               <Field label="Review status">
@@ -298,7 +291,7 @@ function AddCompetency({ open, onClose, existing }: { open: boolean; onClose: ()
       onClose={onClose}
       busy={busy}
       title="Add a competency"
-      subtitle="Creates the SOE record and three practice questions."
+      subtitle="Creates the SOE record. Once you submit it, the group can ask you questions on it."
       footer={
         <>
           <button className="btn" onClick={onClose} disabled={busy}>

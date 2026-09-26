@@ -12,6 +12,8 @@ import { Avatar, Empty, PageHead } from '../ui';
 function target(n: Notice): [View, Record<string, string>?] {
   switch (n.kind) {
     case 'soe':
+    case 'question':
+    case 'answer':
       return ['soe', { record: n.ref }];
     case 'post':
     case 'reply':

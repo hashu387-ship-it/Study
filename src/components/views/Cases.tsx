@@ -8,7 +8,7 @@ import { api, checkFile, uploadFile } from '@/lib/client/api';
 import { fmtDate } from '@/lib/time';
 import { PRESENTATION_STATUSES, REVIEW_STATUSES, type CaseStudy } from '@/lib/types';
 import { useHub } from '../hub';
-import { Avatar, Field, FileChip, PageHead, Select, Sheet, StatusBadge } from '../ui';
+import { Avatar, Field, FileChip, FileView, PageHead, Select, Sheet, StatusBadge } from '../ui';
 import { nextWorkshop, SessionWhen, WORKSHOP_TARGET } from './shared';
 
 export function Cases() {
@@ -208,6 +208,11 @@ function CaseEditor({ record, onClose }: { record: CaseStudy; onClose: () => voi
             )}
           </div>
         </Field>
+        {!slides && record.slides && !removeSlides && (
+          <div className="wide">
+            <FileView file={record.slides} />
+          </div>
+        )}
         <Field label="Case study title" wide>
           <input value={draft.title} maxLength={200} disabled={!owner} onChange={(e) => set('title', e.target.value)} />
         </Field>

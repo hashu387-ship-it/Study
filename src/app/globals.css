@@ -1899,6 +1899,18 @@ button.record-card:hover {
   gap: 10px;
 }
 
+.attachments > button {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.attachments.full {
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .attachments img {
   display: block;
   width: 200px;
@@ -2197,4 +2209,228 @@ table.table {
   font-size: 26px;
   line-height: 32px;
   font-weight: 600;
+}
+
+/* ---------- File previews ---------- */
+
+button.file-chip {
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+button.file-chip:hover {
+  border-color: var(--bronze);
+}
+
+.preview {
+  margin: 0;
+  border: 1px solid var(--line);
+  background: var(--surface-raised);
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  animation: rise var(--dur-slow) var(--ease-quiet) both;
+}
+
+.preview-body {
+  max-height: 460px;
+  overflow: auto;
+  background: var(--canvas);
+  -webkit-overflow-scrolling: touch;
+}
+
+.preview.tall .preview-body {
+  max-height: none;
+  overflow: visible;
+}
+
+.preview figcaption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 6px 6px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.preview figcaption span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview-note {
+  padding: 18px;
+  margin: 0;
+  font-size: 14px;
+}
+
+.preview-image {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.pdf-pages {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.pdf-pages canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+
+.preview-text {
+  margin: 0;
+  padding: 18px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: var(--font-data-stack);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.preview-doc {
+  padding: 22px;
+  background: #fff;
+  color: #1c1b19;
+  font-size: 15px;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.preview-doc img {
+  max-width: 100%;
+  height: auto;
+}
+
+.preview-doc table {
+  border-collapse: collapse;
+  max-width: 100%;
+}
+
+.preview-doc td,
+.preview-doc th {
+  border: 1px solid var(--line);
+  padding: 4px 8px;
+}
+
+.preview-frame {
+  display: block;
+  width: 100%;
+  height: 460px;
+  border: 0;
+  background: #fff;
+}
+
+.preview.tall .preview-frame {
+  height: 70vh;
+}
+
+/* ---------- SOE question thread ---------- */
+
+.qa-thread {
+  display: flex;
+  flex-direction: column;
+  margin-top: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.qa-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  animation: rise var(--dur-slow) var(--ease-quiet) both;
+}
+
+.qa-q {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.qa-q p {
+  margin: 0 0 4px;
+  font-weight: 600;
+  white-space: pre-wrap;
+}
+
+.qa-a {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-left: 52px;
+  padding-left: 14px;
+  border-left: 1px solid var(--bronze);
+}
+
+.qa-a p {
+  margin: 4px 0 0;
+  white-space: pre-wrap;
+}
+
+.qa-wait {
+  margin: 0 0 0 52px;
+}
+
+@media (max-width: 560px) {
+  .qa-a,
+  .qa-wait {
+    margin-left: 0;
+  }
+}
+
+.qa-level {
+  display: flex;
+  flex-direction: column;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.qa-level-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.qa-level .qa-item:last-of-type {
+  border-bottom: 0;
+}
+
+.qa-ask {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.qa-ask textarea {
+  min-height: 84px;
+  resize: vertical;
+}
+
+.qa-q .avatar {
+  flex-shrink: 0;
+}
+
+.qa-row-status {
+  display: block;
+  margin-top: 8px;
 }

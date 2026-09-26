@@ -65,7 +65,7 @@ export function SoeArt(props: Props) {
 
 export function QaArt(props: Props) {
   return (
-    <Frame {...props} label="A questioner asks and the candidate answers">
+    <Frame {...props} label="A group member asks and the candidate answers">
       <path d="M26 30h92v44H54l-14 14V74H26z" {...ink} />
       <path d="M40 46h58M40 58h40" {...ink} />
       <text x="110" y="47" textAnchor="end" fontSize="16" fontFamily="var(--font-display-stack)" fill="var(--bronze)">

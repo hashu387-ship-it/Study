@@ -26,7 +26,7 @@ export const GET = handle(async () => {
       .order('member_id'),
     client
       .from('qa')
-      .select('id,soe_id,number,question,context,action,basis,outcome,feedback,status,revision,updated_by,updated_at')
+      .select('id,soe_id,number,level,asked_by,question,context,action,basis,outcome,feedback,status,revision,updated_by,updated_at')
       .order('number'),
     client
       .from('case_studies')

@@ -34,7 +34,7 @@ export const GET = handle(async (_req: Request, { params }: Ctx) => {
   return json(full);
 });
 
-// Record details (questioner, review status, leader notes) are open to the whole group.
+// Record details (competency type, review status, leader notes) are open to the whole group.
 // The SOE text itself only changes through /submit, by the candidate.
 export const PATCH = handle(async (req: Request, { params }: Ctx) => {
   const me = await requireMember();
@@ -43,20 +43,11 @@ export const PATCH = handle(async (req: Request, { params }: Ctx) => {
   const revision = revisionOf(body.revision);
   const current = maybe(await db().from('soe').select('member_id').eq('id', id).maybeSingle());
   if (!current) fail('That SOE record could not be found.', 404);
-  let questioner: string | null = null;
-  if (body.questioner_id) {
-    if (typeof body.questioner_id !== 'string') fail('Choose a questioner.');
-    if (body.questioner_id === current.member_id) fail('Choose someone other than the candidate as questioner.');
-    const exists = maybe(await db().from('members').select('id').eq('id', body.questioner_id).maybeSingle());
-    if (!exists) fail('That questioner could not be found.');
-    questioner = body.questioner_id;
-  }
   const updated = must(
     await db()
       .from('soe')
       .update({
         competency_type: oneOf(body.competency_type, ['Mandatory', 'Optional', 'Technical'] as const, 'competency type'),
-        questioner_id: questioner,
         status: oneOf(body.status, REVIEW_STATUSES, 'review status'),
         notes: str(body.notes, 'notes', 4000),
         revision: revision + 1,

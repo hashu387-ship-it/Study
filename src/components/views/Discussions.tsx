@@ -8,23 +8,35 @@ import { api, checkFile, fileUrl, uploadFile } from '@/lib/client/api';
 import { ago } from '@/lib/time';
 import type { FileRef, Post } from '@/lib/types';
 import { attempt, useHub } from '../hub';
-import { Avatar, Empty, Field, FileChip, PageHead, Sheet } from '../ui';
+import { Avatar, Empty, Field, FileChip, FileView, PageHead, PreviewSheet, Sheet } from '../ui';
 
 const MAX_FILES = 4;
 
-function Attachments({ files }: { files: FileRef[] }) {
+// In a thread every file shows in place; the feed keeps small thumbnails and chips that open a preview.
+function Attachments({ files, full }: { files: FileRef[]; full?: boolean }) {
+  const [viewing, setViewing] = useState<FileRef | null>(null);
   if (!files.length) return null;
+  if (full) {
+    return (
+      <div className="attachments full">
+        {files.map((f) => (
+          <FileView key={f.id} file={f} />
+        ))}
+      </div>
+    );
+  }
   return (
     <div className="attachments">
       {files.map((f) =>
         f.content_type.startsWith('image/') ? (
-          <a key={f.id} href={fileUrl(f.id, true)} target="_blank" rel="noreferrer" title={f.name}>
+          <button key={f.id} type="button" onClick={() => setViewing(f)} title={`Preview ${f.name}`}>
             <img src={fileUrl(f.id, true)} alt={f.name} loading="lazy" />
-          </a>
+          </button>
         ) : (
           <FileChip key={f.id} file={f} />
         ),
       )}
+      {viewing && <PreviewSheet file={viewing} onClose={() => setViewing(null)} />}
     </div>
   );
 }
@@ -167,7 +179,7 @@ export function Discussions() {
               {meta(thread.post)}
               <h3>{thread.post.title}</h3>
               <p className="post-body">{thread.post.body}</p>
-              <Attachments files={thread.post.attachments} />
+              <Attachments files={thread.post.attachments} full />
             </article>
 
             <div className="row" style={{ marginBottom: 12 }}>
@@ -184,7 +196,7 @@ export function Discussions() {
                 <div key={r.id} className="reply post">
                   {meta(r, r.member_id === thread.post.member_id ? 'Posted this' : undefined)}
                   <p className="post-body">{r.body}</p>
-                  <Attachments files={r.attachments} />
+                  <Attachments files={r.attachments} full />
                 </div>
               ))}
               {!thread.replies.length && <Empty>No replies yet. Ask a question or share an answer.</Empty>}

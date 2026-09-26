@@ -22,8 +22,8 @@ export const STEPS: { title: string; text: string; art: (p: { size?: number }) =
     view: 'soe',
   },
   {
-    title: 'Practise questions',
-    text: 'In Q&A practice, your questioner writes questions for you and you answer in four parts. When you are someone’s questioner, you write theirs.',
+    title: 'Ask and answer',
+    text: 'Once someone submits their SOE, open it and ask them a question. When the group asks about yours, you get an alert and answer in four parts.',
     art: QaArt,
     view: 'qa',
   },

@@ -13,6 +13,8 @@ import openpyxl
 
 LEADER = "M02"  # Saleeth Yaseen
 UAE_OFFSET = "+04:00"
+STUDY_DAYS = {6, 1, 2}  # Sunday, Tuesday, Wednesday (Python weekday numbers)
+STUDY_START, STUDY_END = "20:00", "21:30"
 
 
 def q(value):
@@ -78,15 +80,21 @@ def main(path):
             f"{q(status or 'Not Started')}, {q(notes)});"
         )
 
+    # Study sessions run on Sunday, Tuesday and Wednesday, 8:00 to 9:30 pm UAE / Oman time.
     for row in wb["02- Calander"].iter_rows(min_row=4, max_col=5, values_only=True):
         day, _weekday, topic, hours, notes = row
         if not text(topic):
             continue
         title = text(topic)
+        iso = day.date().isoformat()
+        timed = day.weekday() in STUDY_DAYS
+        starts = q(f"{iso}T{STUDY_START}:00{UAE_OFFSET}") if timed else "null"
+        ends = q(f"{iso}T{STUDY_END}:00{UAE_OFFSET}") if timed else "null"
+        planned = 1.5 if timed else (None if hours in (None, "") else float(hours))
         out.append(
-            "insert into public.sessions (title, kind, session_date, hours, notes) values "
-            f"({q(title)}, {q(session_kind(title))}, {q(day.date().isoformat())}, "
-            f"{'null' if hours in (None, '') else float(hours)}, {q(text(notes))});"
+            "insert into public.sessions (title, kind, session_date, starts_at, ends_at, hours, notes) values "
+            f"({q(title)}, {q(session_kind(title))}, {q(iso)}, {starts}, {ends}, "
+            f"{'null' if planned is None else planned}, {q(text(notes))});"
         )
 
     # From the organiser's WhatsApp message: this Monday's Q&A runs until 9 pm and the

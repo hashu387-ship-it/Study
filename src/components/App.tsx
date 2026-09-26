@@ -11,10 +11,8 @@ import {
   Megaphone,
   MessageCircleQuestion,
   MessagesSquare,
-  Moon,
   MoreHorizontal,
   Presentation,
-  Sun,
   Users,
 } from 'lucide-react';
 import { api } from '@/lib/client/api';
@@ -62,7 +60,6 @@ export function App() {
   const [view, setView] = useState<View>('overview');
   const [params, setParams] = useState(() => new URLSearchParams());
   const [toasts, setToasts] = useState<{ id: number; message: string; kind?: 'error' }[]>([]);
-  const [dark, setDark] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [switching, setSwitching] = useState(false);
   const inflight = useRef<Promise<void> | null>(null);
@@ -114,7 +111,6 @@ export function App() {
       setParams(location.params);
     };
     sync();
-    setDark(document.documentElement.dataset.theme === 'dark');
     reload();
     registerWorker();
     window.addEventListener('popstate', sync);
@@ -127,15 +123,6 @@ export function App() {
       clearInterval(timer);
     };
   }, [reload]);
-
-  function toggleTheme() {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.dataset.theme = next ? 'dark' : 'light';
-    try {
-      localStorage.setItem('g03-theme', next ? 'dark' : 'light');
-    } catch {}
-  }
 
   const hub = useMemo<Hub | null>(() => {
     if (!state?.me) return null;
@@ -152,12 +139,6 @@ export function App() {
       label: (id) => (id ? `${byId.get(id)?.name ?? 'Former member'} · ${id}` : 'Unassigned'),
     };
   }, [state, reload, go, params, toast]);
-
-  const themeButton = (
-    <button className="icon-btn" onClick={toggleTheme} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>
-      {dark ? <Sun size={20} /> : <Moon size={20} />}
-    </button>
-  );
 
   const toastList = (
     <div className="toasts" role="status" aria-live="polite">
@@ -196,7 +177,6 @@ export function App() {
         <Welcome
           members={state.members}
           current={state.me?.memberId}
-          themeButton={themeButton}
           onBack={state.me ? () => setSwitching(false) : undefined}
           onChosen={async () => {
             await reload();
@@ -242,7 +222,6 @@ export function App() {
           <header className="topbar">
             <div className="brand">Group 03</div>
             <h1>{current.label}</h1>
-            {themeButton}
             <button className="icon-btn" onClick={() => go('alerts')} aria-label={`Alerts${state.unread ? `, ${state.unread} unread` : ''}`}>
               <Bell size={20} />
               {state.unread ? <span className="count">{state.unread}</span> : null}

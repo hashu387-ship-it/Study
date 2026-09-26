@@ -1,6 +1,6 @@
 /* Group 03 Tracker: a kept professional document. Cream paper, charcoal ink, bronze headings,
    square corners, hairlines instead of shadows, motion that arrives slowly and settles.
-   Tokens follow the "Group 03 Tracker" design system (Bronze = light, Charcoal = dark). */
+   Tokens follow the "Group 03 Tracker" design system (Bronze theme only). */
 
 :root {
   color-scheme: light;
@@ -41,29 +41,6 @@
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 }
 
-:root[data-theme='dark'] {
-  color-scheme: dark;
-  --canvas: #1f2426;
-  --surface: #2d3436;
-  --surface-raised: #363e40;
-  --surface-overlay: #3f484a;
-  --line: #475052;
-  --line-strong: #8e958f;
-  --ink: #f5f3ee;
-  --ink-muted: #bcb9b0;
-  --bronze-text: #cbb68c;
-  --accent: #cbb68c;
-  --on-accent: #2d3436;
-  --accent-soft: #403d33;
-  --positive: #a3c98f;
-  --positive-soft: #34443a;
-  --caution: #f2ab6b;
-  --caution-soft: #4a3a2b;
-  --danger: #f3a192;
-  --danger-soft: #4c3432;
-  --shadow-overlay: 0 24px 48px -16px #000000a6;
-  --focus-ring: 0 0 0 2px #2d3436, 0 0 0 4px #cbb68c;
-}
 
 * {
   box-sizing: border-box;
@@ -1518,11 +1495,6 @@ dialog.sheet::backdrop {
   font-size: 13px;
 }
 
-.theme-corner {
-  position: fixed;
-  top: max(16px, env(safe-area-inset-top));
-  right: 16px;
-}
 
 /* ---------- Calendar ---------- */
 

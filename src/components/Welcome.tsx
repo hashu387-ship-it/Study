@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type ReactNode } from 'react';
+import { useState } from 'react';
 import { ChevronRight } from 'lucide-react';
 import { api } from '@/lib/client/api';
 import type { Member } from '@/lib/types';
@@ -10,14 +10,12 @@ import { Avatar } from './ui';
 export function Welcome({
   members,
   current,
-  themeButton,
   onChosen,
   onBack,
   toast,
 }: {
   members: Member[];
   current?: string;
-  themeButton: ReactNode;
   onChosen: () => Promise<void>;
   onBack?: () => void;
   toast: (message: string, kind?: 'error') => void;
@@ -38,7 +36,6 @@ export function Welcome({
 
   return (
     <div className="welcome">
-      <div className="theme-corner">{themeButton}</div>
       <div className="welcome-card">
         <div className="brand">Group 03</div>
         <div className="eyebrow">RICS APC final assessment</div>

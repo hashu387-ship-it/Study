@@ -18,21 +18,12 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f5f3ee' },
-    { media: '(prefers-color-scheme: dark)', color: '#2d3436' },
-  ],
+  themeColor: '#f5f3ee',
 };
-
-// Applies the saved theme before first paint so the Charcoal theme doesn't flash Bronze.
-const themeScript = `try{var t=localStorage.getItem('g03-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${display.variable} ${sans.variable} ${data.variable}`} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html lang="en-GB" className={`${display.variable} ${sans.variable} ${data.variable}`}>
       <body>{children}</body>
     </html>
   );

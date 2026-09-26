@@ -155,7 +155,7 @@ export function CycleDiagram({ steps, size = 320 }: { steps: string[]; size?: nu
           </g>
         );
       })}
-      <text x={c} y={c - 6} textAnchor="middle" fontSize="26" fontFamily="var(--font-display-stack)" fill="var(--ink)">
+      <text x={c} y={c - 6} textAnchor="middle" fontSize="26" fontFamily="var(--font-accent-stack)" fontStyle="italic" fill="var(--ink)">
         Every week
       </text>
       <text x={c} y={c + 18} textAnchor="middle" fontSize="11" letterSpacing="1.6" fontFamily="var(--font-sans-stack)" fill="var(--bronze-text)">

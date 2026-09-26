@@ -199,6 +199,18 @@ export function FileView({ file }: { file: FileRef }) {
   );
 }
 
+// Like "Copilot, rebuilt": the last word of a title is set in the serif italic.
+export function AccentTitle({ text }: { text: string }) {
+  const cut = text.trimEnd().lastIndexOf(' ');
+  if (cut <= 0) return <em className="accent-word">{text}</em>;
+  return (
+    <>
+      {text.slice(0, cut + 1)}
+      <em className="accent-word">{text.slice(cut + 1)}</em>
+    </>
+  );
+}
+
 // Empty screens show a small line drawing; pass art={false} for tight spaces.
 export function Empty({ children, art = true }: { icon?: ReactNode; art?: boolean; children: ReactNode }) {
   return (
@@ -214,7 +226,9 @@ export function PageHead({ eyebrow, title, text, action }: { eyebrow: string; ti
     <div className="page-head">
       <div>
         <div className="eyebrow">{eyebrow}</div>
-        <h2>{title}</h2>
+        <h2>
+          <AccentTitle text={title} />
+        </h2>
         {text && <p>{text}</p>}
       </div>
       {action}

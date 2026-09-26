@@ -49,6 +49,18 @@ const NAV: { view: View; label: string; icon: typeof Bell }[] = [
   { view: 'members', label: 'Members', icon: Users },
 ];
 
+// Each area has its own colour; everything else stays bronze.
+export const TONE: Partial<Record<View, 'green' | 'blue' | 'orange' | 'purple'>> = {
+  soe: 'green',
+  calendar: 'blue',
+  attendance: 'blue',
+  qa: 'orange',
+  cases: 'orange',
+  posts: 'purple',
+  announcements: 'purple',
+  alerts: 'purple',
+};
+
 const DOCK: View[] = ['overview', 'soe', 'calendar', 'posts'];
 const VIEWS = new Set(NAV.map((n) => n.view));
 
@@ -207,7 +219,7 @@ export function App() {
 
   return (
     <HubContext.Provider value={hub}>
-      <div className="app">
+      <div className="app" data-tone={TONE[view] ?? 'bronze'}>
         <aside className="sidebar">
           <div className="brand">
             Group 03
@@ -216,7 +228,7 @@ export function App() {
           <nav className="nav" aria-label="Sections">
             <div className="nav-label">Workspace</div>
             {NAV.map(({ view: v, label, icon: Icon }) => (
-              <button key={v} className="nav-item" aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
+              <button key={v} className="nav-item" data-tone={TONE[v] ?? 'bronze'} aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
                 <Icon size={18} />
                 {label}
                 {counts[v] ? <span className="count">{counts[v]}</span> : null}
@@ -263,7 +275,7 @@ export function App() {
             const item = NAV.find((n) => n.view === v)!;
             const Icon = item.icon;
             return (
-              <button key={v} aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
+              <button key={v} data-tone={TONE[v] ?? 'bronze'} aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
                 <Icon size={21} />
                 {v === 'overview' ? 'Home' : v === 'soe' ? 'SOE' : v === 'posts' ? 'Posts' : item.label}
               </button>
@@ -281,7 +293,7 @@ export function App() {
         <Sheet open={moreOpen} onClose={() => setMoreOpen(false)} title="All sections">
           <div className="nav">
             {NAV.map(({ view: v, label, icon: Icon }) => (
-              <button key={v} className="nav-item" aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
+              <button key={v} className="nav-item" data-tone={TONE[v] ?? 'bronze'} aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
                 <Icon size={18} />
                 {label}
                 {counts[v] ? <span className="count">{counts[v]}</span> : null}

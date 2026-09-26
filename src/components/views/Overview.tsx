@@ -14,7 +14,7 @@ export function Overview() {
   const workshop = nextWorkshop(state);
   const ready = state.cases.filter((c) => c.presentation_status === 'Ready' || c.presentation_status === 'Presented');
   const soeStarted = state.soe.filter((s) => s.words.some((w) => w > 0)).length;
-  const questionsDrafted = state.qa.filter((q) => q.question.trim()).length;
+  const questionsAnswered = state.qa.filter(answered).length;
   const announcement = state.announcements[0];
   const active = state.members.filter((m) => m.status === 'Active');
 
@@ -108,9 +108,9 @@ export function Overview() {
             <MessageCircleQuestion size={20} />
           </span>
           <b>
-            {questionsDrafted}/{state.qa.length}
+            {questionsAnswered}/{state.qa.length}
           </b>
-          <span>Practice questions written</span>
+          <span>Group questions answered</span>
         </button>
         <button className="card stat" onClick={() => go('cases')} style={{ textAlign: 'left' }}>
           <span className="stat-icon">

@@ -40,7 +40,9 @@ export function Welcome({
         <div className="brand">Group 03</div>
         <div className="eyebrow">RICS APC final assessment</div>
         <h1 className="reveal-line">
-          <span>Continue as…</span>
+          <span>
+            Continue <em className="accent-word">as…</em>
+          </span>
         </h1>
         <p>Pick your name to join your study circle.</p>
         <div className="member-grid">

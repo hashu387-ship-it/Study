@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Cormorant_Garamond, DM_Sans, Open_Sans } from 'next/font/google';
+import { Inter, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 
-const display = Cormorant_Garamond({ subsets: ['latin'], weight: ['500', '600'], variable: '--font-display', display: 'swap' });
-const sans = Open_Sans({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
-const data = DM_Sans({ subsets: ['latin'], variable: '--font-data', display: 'swap' });
+// A clean sans for everything, with a serif italic for the one word in a title that carries it.
+const display = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-display', display: 'swap' });
+const sans = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'Group 03 Tracker',
@@ -18,13 +18,22 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#f5f3ee',
+  themeColor: '#e9f0f8',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-GB" className={`${display.variable} ${sans.variable} ${data.variable}`}>
-      <body>{children}</body>
+    <html lang="en-GB" className={`${display.variable} ${sans.variable}`}>
+      <body>
+        {/* Soft colour shapes that sit behind the frosted glass. */}
+        <div className="backdrop" aria-hidden="true">
+          <span className="blob green" />
+          <span className="blob blue" />
+          <span className="blob orange" />
+          <span className="blob purple" />
+        </div>
+        {children}
+      </body>
     </html>
   );
 }

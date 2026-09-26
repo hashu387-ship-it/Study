@@ -2,7 +2,7 @@
 // with the group time alongside when the two differ.
 
 export const GROUP_TZ = 'Asia/Dubai';
-export const GROUP_LABEL = 'UAE / Oman';
+export const GROUP_LABEL = 'GST';
 
 export function localTz() {
   try {
@@ -34,24 +34,30 @@ export function sameAsGroup(at = new Date()) {
 export function fmtTime(iso: string, tz?: string) {
   return new Date(iso)
     .toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: tz })
-    .replace(':00', '')
+    .replace(/\s+/g, ' ')
     .toLowerCase();
 }
 
+// "7:00 – 8:00 pm", keeping am/pm on both ends only when they differ.
 function range(start: string | null, end: string | null, tz?: string) {
-  if (start && end) return `${fmtTime(start, tz)} to ${fmtTime(end, tz)}`;
+  if (start && end) {
+    const a = fmtTime(start, tz);
+    const b = fmtTime(end, tz);
+    const sameHalf = a.slice(-2) === b.slice(-2);
+    return `${sameHalf ? a.slice(0, -3) : a} – ${b}`;
+  }
   if (start) return fmtTime(start, tz);
   if (end) return `until ${fmtTime(end, tz)}`;
   return '';
 }
 
-// "8 to 9 pm your time" plus "9 to 10 pm UAE / Oman" when the zones differ.
+// "7:00 – 8:00 pm your time" plus "8:00 – 9:00 pm GST" when the zones differ.
 export function sessionTimes(s: { starts_at: string | null; ends_at: string | null }) {
   const at = s.starts_at ?? s.ends_at;
   if (!at) return null;
   const same = sameAsGroup(new Date(at));
   return {
-    local: range(s.starts_at, s.ends_at) + (same ? ` ${GROUP_LABEL} time` : ' your time'),
+    local: range(s.starts_at, s.ends_at) + (same ? ` ${GROUP_LABEL}` : ' your time'),
     group: same ? null : `${range(s.starts_at, s.ends_at, GROUP_TZ)} ${GROUP_LABEL}`,
   };
 }
@@ -62,8 +68,12 @@ export function todayInGroup() {
   );
 }
 
+// House date style: "Mon 28 Sep", "Monday 28 September". No commas, three-letter months.
 export function fmtDate(date: string, opts: Intl.DateTimeFormatOptions = { weekday: 'short', day: 'numeric', month: 'short' }) {
-  return new Date(date + 'T12:00:00Z').toLocaleDateString('en-GB', { ...opts, timeZone: 'UTC' });
+  return new Date(date + 'T12:00:00Z')
+    .toLocaleDateString('en-GB', { ...opts, timeZone: 'UTC' })
+    .replace(',', '')
+    .replace('Sept', 'Sep');
 }
 
 export function fmtDateTime(iso: string) {

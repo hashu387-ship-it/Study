@@ -24,6 +24,8 @@ export type Hub = {
   toast: (message: string, kind?: 'error') => void;
   member: (id: string | null | undefined) => Member | undefined;
   name: (id: string | null | undefined) => string;
+  // "Mohd. Hassan · M06": how people are labelled on cards, posts and registers.
+  label: (id: string | null | undefined) => string;
 };
 
 export const HubContext = createContext<Hub | null>(null);

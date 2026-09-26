@@ -65,7 +65,9 @@ export function Members() {
                 <Avatar member={m} size="lg" />
                 <div>
                   <strong>{m.name}</strong>
-                  <small>{m.pathway}</small>
+                  <small>
+                    <span className="code">{m.id}</span> · {m.pathway}
+                  </small>
                 </div>
               </div>
               <div className="row">

@@ -59,7 +59,7 @@ function FilePicker({ files, onChange, disabled, onError }: { files: File[]; onC
 
 export function Discussions() {
   const hub = useHub();
-  const { me, params, go, member, name } = hub;
+  const { me, params, go, member, label } = hub;
   const threadId = params.get('post');
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [thread, setThread] = useState<{ post: Post; replies: Post[] } | null>(null);
@@ -137,7 +137,7 @@ export function Discussions() {
       <Avatar member={member(post.member_id)} />
       <div>
         <strong>
-          {name(post.member_id)}
+          {label(post.member_id)}
           {tag && <span className="badge yellow">{tag}</span>}
         </strong>
         <small>{ago(post.created_at)}</small>

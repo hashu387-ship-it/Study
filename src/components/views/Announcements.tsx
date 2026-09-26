@@ -9,7 +9,7 @@ import { Avatar, Empty, Field, PageHead, Sheet } from '../ui';
 
 export function Announcements() {
   const hub = useHub();
-  const { state, me, member, name, reload } = hub;
+  const { state, me, member, name, label, reload } = hub;
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -69,7 +69,7 @@ export function Announcements() {
                 <Avatar member={author} />
                 <div>
                   <strong>
-                    {name(a.member_id)}
+                    {label(a.member_id)}
                     {author?.is_leader && <span className="badge yellow">Group leader</span>}
                   </strong>
                   <small>{ago(a.created_at)}</small>
@@ -117,7 +117,7 @@ export function Announcements() {
                       })
                     }
                   >
-                    <BellRing size={16} /> Remind the rest
+                    <BellRing size={16} /> Nudge the rest
                   </button>
                 )}
                 <button

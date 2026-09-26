@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { ChevronRight, GraduationCap } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { api } from '@/lib/client/api';
 import type { Member } from '@/lib/types';
 import { Avatar } from './ui';
@@ -40,11 +40,11 @@ export function Welcome({
     <div className="welcome">
       <div className="theme-corner">{themeButton}</div>
       <div className="welcome-card">
-        <span className="brand-mark">
-          <GraduationCap size={32} />
-        </span>
-        <div className="eyebrow">RICS Group 03 · Study Hub</div>
-        <h1>Continue as who?</h1>
+        <div className="brand">Group 03</div>
+        <div className="eyebrow">RICS APC final assessment</div>
+        <h1 className="reveal-line">
+          <span>Continue as…</span>
+        </h1>
         <p>Pick your name to join your study circle.</p>
         <div className="member-grid">
           {members
@@ -54,7 +54,9 @@ export function Welcome({
                 <Avatar member={m} />
                 <span>
                   {m.name}
-                  <small>{m.is_leader ? 'Group leader' : m.id === current ? 'Current' : 'Member'}</small>
+                  <small>
+                    <span className="code">{m.id}</span> · {m.is_leader ? 'Group leader' : m.id === current ? 'Current' : 'Member'}
+                  </small>
                 </span>
                 <ChevronRight size={18} />
               </button>

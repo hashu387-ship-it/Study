@@ -72,7 +72,9 @@ export function Soe() {
               <Avatar member={member(s.member_id)} />
               <div>
                 <strong>{name(s.member_id)}</strong>
-                <small>{s.competency}</small>
+                <small>
+                  <span className="code">{s.member_id}</span> · {s.competency}
+                </small>
               </div>
               <ArrowUpRight size={18} className="muted" />
             </div>

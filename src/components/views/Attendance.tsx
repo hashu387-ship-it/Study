@@ -123,7 +123,7 @@ export function Attendance() {
                   <div key={m.id} className="att-row">
                     <Avatar member={m} size="sm" />
                     <div>
-                      <strong className="small">{m.name}</strong>
+                      <strong className="small">{m.name} <span className="code">· {m.id}</span></strong>
                       <small>{current ? `Marked by ${name(current.marked_by)}` : 'Not marked yet'}</small>
                     </div>
                     <div className="segmented" role="group" aria-label={`Attendance for ${m.name}`}>
@@ -201,7 +201,9 @@ export function Attendance() {
                   const attended = row.filter((a) => a?.status === 'present' || a?.status === 'late').length;
                   return (
                     <tr key={m.id}>
-                      <td>{m.name}</td>
+                      <td>
+                        {m.name} <span className="code">· {m.id}</span>
+                      </td>
                       {row.map((a, i) => (
                         <td key={registerSessions[i].id}>
                           <span className={'mark ' + (a?.status ?? 'none')} title={a ? LABELS[a.status] : 'Not marked'}>

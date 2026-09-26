@@ -47,7 +47,7 @@ export function QaPractice() {
         </div>
       )}
 
-      <h3 id="i-ask" style={{ margin: '4px 0 14px' }}>
+      <h3 id="i-ask" className="section-title">
         Questions I ask
       </h3>
       <div className="grid two" style={{ marginBottom: 28 }}>
@@ -63,7 +63,7 @@ export function QaPractice() {
         </div>
       )}
 
-      <h3 style={{ margin: '4px 0 14px' }}>Questions for me</h3>
+      <h3 className="section-title">Questions for me</h3>
       <div className="grid two">
         {answering.map((s) => (
           <Record key={s.id} soe={s} role="candidate" onOpen={setEditing} />

@@ -75,10 +75,11 @@ export function Cases() {
             <div className="record-top">
               <Avatar member={member(c.member_id)} />
               <div>
-                <strong>
-                  {name(c.member_id)}
-                  {c.member_id === me.memberId ? ' (you)' : ''}
-                </strong>
+                <strong>{name(c.member_id)}</strong>
+                <small className="code">
+                  {c.member_id}
+                  {c.member_id === me.memberId ? ' · you' : ''}
+                </small>
                 <small>{c.title || 'Case study title not added yet'}</small>
               </div>
               <ArrowUpRight size={18} className="muted" />

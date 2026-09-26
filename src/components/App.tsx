@@ -6,7 +6,6 @@ import {
   BookOpen,
   CalendarDays,
   ClipboardCheck,
-  GraduationCap,
   LayoutDashboard,
   LoaderCircle,
   Megaphone,
@@ -150,6 +149,7 @@ export function App() {
       toast,
       member: (id) => (id ? byId.get(id) : undefined),
       name: (id) => (id ? byId.get(id)?.name ?? 'Former member' : 'Unassigned'),
+      label: (id) => (id ? `${byId.get(id)?.name ?? 'Former member'} · ${id}` : 'Unassigned'),
     };
   }, [state, reload, go, params, toast]);
 
@@ -219,40 +219,28 @@ export function App() {
       <div className="app">
         <aside className="sidebar">
           <div className="brand">
-            <span className="brand-mark">
-              <GraduationCap size={24} />
-            </span>
-            <div>
-              RICS GROUP <b>03</b>
-              <small>STUDY HUB</small>
-            </div>
+            Group 03
+            <small>RICS APC tracker</small>
           </div>
           <nav className="nav" aria-label="Sections">
-            <div className="nav-label">WORKSPACE</div>
+            <div className="nav-label">Workspace</div>
             {NAV.map(({ view: v, label, icon: Icon }) => (
               <button key={v} className="nav-item" aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
-                <Icon size={20} />
+                <Icon size={18} />
                 {label}
                 {counts[v] ? <span className="count">{counts[v]}</span> : null}
               </button>
             ))}
           </nav>
           <div className="sidebar-foot">
-            <strong>Group 03 · QS &amp; Construction</strong>
+            <strong>Quantity Surveying &amp; Construction</strong>
             Prepare evidence, practise answers, and show up for each other.
           </div>
         </aside>
 
         <div className="main">
           <header className="topbar">
-            <div className="brand">
-              <span className="brand-mark">
-                <GraduationCap size={21} />
-              </span>
-              <div>
-                G<b>03</b>
-              </div>
-            </div>
+            <div className="brand">Group 03</div>
             <h1>{current.label}</h1>
             {themeButton}
             <button className="icon-btn" onClick={() => go('alerts')} aria-label={`Alerts${state.unread ? `, ${state.unread} unread` : ''}`}>
@@ -301,7 +289,7 @@ export function App() {
           <div className="nav">
             {NAV.map(({ view: v, label, icon: Icon }) => (
               <button key={v} className="nav-item" aria-current={view === v ? 'page' : undefined} onClick={() => go(v)}>
-                <Icon size={20} />
+                <Icon size={18} />
                 {label}
                 {counts[v] ? <span className="count">{counts[v]}</span> : null}
               </button>

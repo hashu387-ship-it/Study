@@ -2113,37 +2113,10 @@ table.table {
   animation: rise var(--dur-slow) var(--ease-quiet) both;
 }
 
-.tour {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 20px;
-  padding: 8px 0 4px;
-}
 
-.tour p {
-  font-size: 18px;
-  line-height: 28px;
-  max-width: 46ch;
-  animation: rise var(--dur-slow) var(--ease-quiet) var(--dur-stagger) both;
-}
 
-.tour-dots {
-  display: flex;
-  gap: 8px;
-}
 
-.tour-dots i {
-  width: 24px;
-  height: 2px;
-  background: var(--line);
-  transition: background var(--dur-base) var(--ease-glide);
-}
 
-.tour-dots i.on {
-  background: var(--bronze);
-}
 
 .tip {
   display: flex;

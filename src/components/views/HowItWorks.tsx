@@ -1,14 +1,14 @@
 'use client';
 
-import { ArrowRight, PlayCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { useHub } from '../hub';
 import { STEPS } from '../guide';
 import { CycleDiagram } from '../illustrations';
 import { PageHead } from '../ui';
 
-const CYCLE = ['Submit SOE', 'Questioner asks', 'You answer', 'Feedback', 'Session together', 'Attendance'];
+const CYCLE = ['Submit SOE', 'Group asks', 'You answer', 'Feedback', 'Session together', 'Attendance'];
 
-export function HowItWorks({ onReplay }: { onReplay: () => void }) {
+export function HowItWorks() {
   const { go } = useHub();
   return (
     <>
@@ -16,11 +16,6 @@ export function HowItWorks({ onReplay }: { onReplay: () => void }) {
         eyebrow="Guide"
         title="How it works"
         text="The group runs the same cycle every week. Each step below opens the part of the app where it happens."
-        action={
-          <button className="btn primary" onClick={onReplay}>
-            <PlayCircle size={16} /> Replay the walkthrough
-          </button>
-        }
       />
 
       <section className="card how-cycle">

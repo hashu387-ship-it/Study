@@ -1,12 +1,9 @@
 'use client';
 
 import { useEffect, useState, type ReactNode } from 'react';
-import { ArrowLeft, ArrowRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import type { View } from './hub';
 import { AlertArt, AttendanceArt, PickNameArt, QaArt, SessionArt, SoeArt } from './illustrations';
-import { Sheet } from './ui';
-
-export const TOUR_KEY = 'g03-tour-done';
 
 export const STEPS: { title: string; text: string; art: (p: { size?: number }) => ReactNode; view: View }[] = [
   {
@@ -46,71 +43,6 @@ export const STEPS: { title: string; text: string; art: (p: { size?: number }) =
     view: 'alerts',
   },
 ];
-
-export function tourDone() {
-  try {
-    return localStorage.getItem(TOUR_KEY) === '1';
-  } catch {
-    return true;
-  }
-}
-
-export function Walkthrough({ open, onClose, onGo }: { open: boolean; onClose: () => void; onGo: (view: View) => void }) {
-  const [step, setStep] = useState(0);
-  useEffect(() => {
-    if (open) setStep(0);
-  }, [open]);
-  const finish = () => {
-    try {
-      localStorage.setItem(TOUR_KEY, '1');
-    } catch {}
-    onClose();
-  };
-  const s = STEPS[step];
-  const Art = s.art;
-  const last = step === STEPS.length - 1;
-  return (
-    <Sheet
-      open={open}
-      onClose={finish}
-      title={s.title}
-      subtitle={`Step ${step + 1} of ${STEPS.length}`}
-      footer={
-        <>
-          <button className="btn" onClick={finish}>
-            Skip
-          </button>
-          <span className="spacer" />
-          {step > 0 && (
-            <button className="btn" onClick={() => setStep(step - 1)} aria-label="Previous step">
-              <ArrowLeft size={16} />
-            </button>
-          )}
-          <button
-            className="btn primary"
-            onClick={() => {
-              if (!last) return setStep(step + 1);
-              finish();
-              onGo('overview');
-            }}
-          >
-            {last ? 'Start' : 'Next'} <ArrowRight size={16} />
-          </button>
-        </>
-      }
-    >
-      <div className="tour" key={step}>
-        <Art size={260} />
-        <p>{s.text}</p>
-        <div className="tour-dots" aria-hidden="true">
-          {STEPS.map((_, i) => (
-            <i key={i} className={i === step ? 'on' : ''} />
-          ))}
-        </div>
-      </div>
-    </Sheet>
-  );
-}
 
 // A small illustrated hint at the top of a section. Closing it hides it on this device.
 export function Tip({ id, art: Art, title, children }: { id: string; art: (p: { size?: number }) => ReactNode; title: string; children: ReactNode }) {

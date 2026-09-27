@@ -33,7 +33,6 @@ import { Discussions } from './views/Discussions';
 import { Alerts } from './views/Alerts';
 import { Members } from './views/Members';
 import { HowItWorks } from './views/HowItWorks';
-import { tourDone, Walkthrough } from './guide';
 
 const NAV: { view: View; label: string; icon: typeof Bell }[] = [
   { view: 'overview', label: 'Home', icon: LayoutDashboard },
@@ -78,7 +77,6 @@ export function App() {
   const [toasts, setToasts] = useState<{ id: number; message: string; kind?: 'error' }[]>([]);
   const [moreOpen, setMoreOpen] = useState(false);
   const [switching, setSwitching] = useState(false);
-  const [touring, setTouring] = useState(false);
   const inflight = useRef<Promise<void> | null>(null);
   const again = useRef(false);
 
@@ -140,12 +138,6 @@ export function App() {
       clearInterval(timer);
     };
   }, [reload]);
-
-  // The walkthrough opens the first time someone uses the app on this device.
-  const memberId = state?.me?.memberId;
-  useEffect(() => {
-    if (memberId && !tourDone()) setTouring(true);
-  }, [memberId]);
 
   const hub = useMemo<Hub | null>(() => {
     if (!state?.me) return null;
@@ -266,7 +258,7 @@ export function App() {
             {view === 'posts' && <Discussions />}
             {view === 'alerts' && <Alerts />}
             {view === 'members' && <Members />}
-            {view === 'guide' && <HowItWorks onReplay={() => setTouring(true)} />}
+            {view === 'guide' && <HowItWorks />}
           </main>
         </div>
 
@@ -287,8 +279,6 @@ export function App() {
             {state.unread + unseenAnnouncements ? <span className="count">{state.unread + unseenAnnouncements}</span> : null}
           </button>
         </nav>
-
-        <Walkthrough open={touring} onClose={() => setTouring(false)} onGo={go} />
 
         <Sheet open={moreOpen} onClose={() => setMoreOpen(false)} title="All sections">
           <div className="nav">

@@ -5,7 +5,7 @@ import { AttendanceArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
 import { ClipboardCheck, Copy, UserX } from 'lucide-react';
 import { api } from '@/lib/client/api';
-import { fmtDate, todayInGroup } from '@/lib/time';
+import { fmtDate, sessionTimesText, todayInGroup } from '@/lib/time';
 import { ATTENDANCE_STATUSES, type AttendanceStatus } from '@/lib/types';
 import { attempt, useHub } from '../hub';
 import { Avatar, Empty, Field, PageHead, Select } from '../ui';
@@ -75,6 +75,7 @@ export function Attendance() {
     return [
       `*Attendance: ${session.title}*`,
       fmtDate(session.session_date, { weekday: 'long', day: 'numeric', month: 'long' }),
+      ...(sessionTimesText(session) ? [sessionTimesText(session)] : []),
       '',
       `Attended (${present.length}): ${present.join(', ') || 'none'}`,
       ...(excused.length ? [`Excused (${excused.length}): ${excused.join(', ')}`] : []),

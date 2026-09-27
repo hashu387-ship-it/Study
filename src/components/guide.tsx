@@ -26,7 +26,7 @@ export const STEPS: { title: string; text: string; art: (p: { size?: number }) =
   },
   {
     title: 'Join the sessions',
-    text: 'Sunday, Tuesday and Wednesday, 8:00 – 9:30 pm GST. Tap Join on Teams from Home or the calendar. Times show in your own zone too.',
+    text: 'Sunday, Tuesday and Wednesday: KSA 7:00 – 8:30 pm, UAE 8:00 – 9:30 pm, SL 9:30 – 11:00 pm. Tap Join on Teams from Home or the calendar.',
     art: SessionArt,
     view: 'calendar',
   },

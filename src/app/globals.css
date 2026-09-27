@@ -3019,3 +3019,30 @@ dialog.sheet::backdrop {
 .soe-group-head .section-title {
   margin: 0 0 4px;
 }
+
+/* Meeting times in KSA, UAE and Sri Lanka */
+.when .zone-time {
+  color: var(--ink);
+  gap: 6px;
+}
+
+.zone-time b {
+  display: inline-grid;
+  place-items: center;
+  width: 42px;
+  padding: 1px 0;
+  border-radius: var(--r-pill);
+  background: rgb(255 255 255 / 0.7);
+  border: 1px solid var(--glass-edge);
+  font-size: 10.5px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+}
+
+.zone-time:nth-child(2) b {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}

@@ -191,7 +191,7 @@ export function Overview() {
           <div className="card-head">
             <div>
               <h3>Coming up</h3>
-              <p>Times shown in your time zone</p>
+              <p>Times in KSA, UAE and SL</p>
             </div>
             <button className="link-btn" onClick={() => go('calendar')}>
               All <CalendarDays size={16} />

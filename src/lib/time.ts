@@ -1,8 +1,8 @@
-// Sessions are planned in UAE / Oman time. Each person sees their own local time,
-// with the group time alongside when the two differ.
+// Sessions are planned in UAE / Oman time. Every meeting time is shown for the three places the
+// group lives in, KSA, UAE and Sri Lanka, so nobody has to convert.
 
 export const GROUP_TZ = 'Asia/Dubai';
-export const GROUP_LABEL = 'GST';
+export const GROUP_LABEL = 'UAE';
 
 export function localTz() {
   try {
@@ -51,15 +51,22 @@ function range(start: string | null, end: string | null, tz?: string) {
   return '';
 }
 
-// "7:00 – 8:00 pm your time" plus "8:00 – 9:00 pm GST" when the zones differ.
+export const ZONES = [
+  { label: 'KSA', tz: 'Asia/Riyadh' },
+  { label: 'UAE', tz: 'Asia/Dubai' },
+  { label: 'SL', tz: 'Asia/Colombo' },
+] as const;
+
+// [{ label: 'KSA', text: '7:00 – 8:30 pm' }, { label: 'UAE', ... }, { label: 'SL', ... }]
 export function sessionTimes(s: { starts_at: string | null; ends_at: string | null }) {
-  const at = s.starts_at ?? s.ends_at;
-  if (!at) return null;
-  const same = sameAsGroup(new Date(at));
-  return {
-    local: range(s.starts_at, s.ends_at) + (same ? ` ${GROUP_LABEL}` : ' your time'),
-    group: same ? null : `${range(s.starts_at, s.ends_at, GROUP_TZ)} ${GROUP_LABEL}`,
-  };
+  if (!s.starts_at && !s.ends_at) return null;
+  return ZONES.map((z) => ({ label: z.label, text: range(s.starts_at, s.ends_at, z.tz) }));
+}
+
+// "KSA 7:00 – 8:30 pm · UAE 8:00 – 9:30 pm · SL 9:30 – 11:00 pm", for messages and alerts.
+export function sessionTimesText(s: { starts_at: string | null; ends_at: string | null }) {
+  const times = sessionTimes(s);
+  return times ? times.map((t) => `${t.label} ${t.text}`).join(' · ') : '';
 }
 
 export function todayInGroup() {

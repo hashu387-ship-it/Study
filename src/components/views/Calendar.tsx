@@ -5,7 +5,7 @@ import { SessionArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, ClipboardCheck, Download, Link2, Plus, Trash2 } from 'lucide-react';
 import { api } from '@/lib/client/api';
-import { fmtDate, GROUP_LABEL, GROUP_TZ, localTz, monthLabel, sameAsGroup, shiftMonth, toInstant, todayInGroup, wallTime } from '@/lib/time';
+import { fmtDate, fmtTime, GROUP_LABEL, GROUP_TZ, localTz, monthLabel, shiftMonth, toInstant, todayInGroup, wallTime } from '@/lib/time';
 import type { Session } from '@/lib/types';
 import { attempt, useHub } from '../hub';
 import { Empty, Field, PageHead, Select, Sheet } from '../ui';
@@ -106,7 +106,6 @@ export function Calendar() {
   const offset = (first.getUTCDay() + 6) % 7;
   const monthSessions = state.sessions.filter((s) => s.session_date.startsWith(month));
   const selectedSessions = byDate.get(selected) ?? [];
-  const differentZone = !sameAsGroup();
 
   function open(session: Session | null, date = selected) {
     setError('');
@@ -155,9 +154,7 @@ export function Calendar() {
         eyebrow="Study plan"
         title="Calendar"
         text={
-          differentZone
-            ? `Times show in your time zone (${localTz()}), with ${GROUP_LABEL} time alongside.`
-            : `Times are in ${GROUP_LABEL} time.`
+          'Every session shows KSA, UAE and Sri Lanka (SL) time, so nobody has to convert.'
         }
         action={
           <div className="row">
@@ -179,7 +176,7 @@ export function Calendar() {
         }
       />
       <Tip id="calendar" art={SessionArt} title="Every session, one link">
-        Sessions run Sunday, Tuesday and Wednesday, 8:00 – 9:30 pm GST. Tap Join on Teams on the day, or add the sessions to your phone calendar.
+        Sessions run Sunday, Tuesday and Wednesday: KSA 7:00 – 8:30 pm, UAE 8:00 – 9:30 pm, SL 9:30 – 11:00 pm. Tap Join on Teams on the day, or add the sessions to your phone calendar.
       </Tip>
 
       <MeetingLink />
@@ -247,7 +244,7 @@ export function Calendar() {
                         open(s);
                       }}
                     >
-                      {s.starts_at && <b>{new Date(s.starts_at).toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })} </b>}
+                      {s.starts_at && <b>{fmtTime(s.starts_at, GROUP_TZ)} UAE </b>}
                       {s.title}
                     </button>
                   ))}

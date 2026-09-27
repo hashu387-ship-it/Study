@@ -1,10 +1,9 @@
 import { db, must } from '@/lib/server/db';
 import { fail, handle, json } from '@/lib/server/http';
+import { fmtTime, ZONES } from '@/lib/time';
 import { sendPush } from '@/lib/server/notify';
 
 export const dynamic = 'force-dynamic';
-
-const UAE_TIME = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Dubai', hour: 'numeric', minute: '2-digit', hour12: true });
 
 // Called every few minutes by a Supabase pg_cron job. Sends one push per session when its reminder is due.
 export const GET = handle(async (req: Request) => {
@@ -34,8 +33,9 @@ export const GET = handle(async (req: Request) => {
     );
     if (!claimed.length) continue;
     const minutes = Math.max(0, Math.round((start - now) / 60_000));
-    const when = minutes >= 90 ? `at ${UAE_TIME.format(start)} UAE / Oman time` : minutes > 0 ? `in ${minutes} minutes` : 'now';
-    await sendPush({ title: s.title, body: `Starts ${when}.`, url: '/?view=calendar', tag: `session-${s.id}` });
+    const times = ZONES.map((z) => `${z.label} ${fmtTime(s.starts_at, z.tz)}`).join(' · ');
+    const body = minutes >= 90 ? `Starts at ${times}.` : minutes > 0 ? `Starts in ${minutes} minutes (${times}).` : `Starting now (${times}).`;
+    await sendPush({ title: s.title, body, url: '/?view=calendar', tag: `session-${s.id}` });
     sent++;
   }
   return json({ checked: due.length, sent });

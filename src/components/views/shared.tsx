@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock, Globe, Video } from 'lucide-react';
+import { Clock, Video } from 'lucide-react';
 import { fmtDate, sessionTimes, todayInGroup } from '@/lib/time';
 import type { AppState, Session } from '@/lib/types';
 
@@ -32,18 +32,12 @@ export function SessionWhen({ session }: { session: Pick<Session, 'starts_at' | 
   return (
     <span className="when">
       {times ? (
-        <>
-          <span>
-            <Clock size={13} />
-            {times.local}
+        times.map((t) => (
+          <span key={t.label} className="zone-time">
+            <b>{t.label}</b>
+            {t.text}
           </span>
-          {times.group && (
-            <span>
-              <Globe size={13} />
-              {times.group}
-            </span>
-          )}
-        </>
+        ))
       ) : (
         <span>
           <Clock size={13} />

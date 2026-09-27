@@ -3046,3 +3046,48 @@ dialog.sheet::backdrop {
   border-color: var(--accent);
   color: var(--on-accent);
 }
+
+/* SOE cards: glassy green once submitted, glassy red until then */
+.record-card.is-submitted {
+  background: linear-gradient(160deg, rgb(95 174 103 / 0.26), rgb(255 255 255 / 0.5) 70%);
+  border-color: rgb(95 174 103 / 0.55);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 40px -18px rgb(47 116 57 / 0.45);
+}
+
+.record-card.is-pending {
+  background: linear-gradient(160deg, rgb(214 84 70 / 0.2), rgb(255 255 255 / 0.5) 70%);
+  border-color: rgb(214 84 70 / 0.45);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 40px -18px rgb(169 58 42 / 0.4);
+}
+
+.submit-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.submit-tag::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.is-submitted .submit-tag {
+  background: rgb(95 174 103 / 0.18);
+  color: var(--green-ink);
+}
+
+.is-pending .submit-tag {
+  background: rgb(214 84 70 / 0.14);
+  color: var(--danger);
+}

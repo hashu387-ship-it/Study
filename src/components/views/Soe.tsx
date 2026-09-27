@@ -110,7 +110,7 @@ export function Soe() {
           </div>
           <div className="grid three">
             {records.map((s) => (
-              <button key={s.id} className="card record-card" onClick={() => setOpenId(s.id)}>
+              <button key={s.id} className={'card record-card ' + (s.submitted_at ? 'is-submitted' : 'is-pending')} onClick={() => setOpenId(s.id)}>
                 <div className="record-top">
                   <Avatar member={member(s.member_id)} />
                   <div>
@@ -128,9 +128,10 @@ export function Soe() {
                     </span>
                   ))}
                 </div>
+                <span className="submit-tag">{s.submitted_at ? 'Submitted' : 'Not submitted'}</span>
                 <div className="record-foot">
                   <StatusBadge status={s.status} />
-                  <span>{s.submitted_at ? questionCount(asked(s.id)) : 'Not submitted yet'}</span>
+                  {s.submitted_at && <span>{questionCount(asked(s.id))}</span>}
                 </div>
                 {s.member_id === me.memberId && !s.words.every((w) => w) && <span className="badge yellow">Yours · add your SOE</span>}
               </button>

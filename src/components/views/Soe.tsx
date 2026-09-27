@@ -3,8 +3,9 @@
 import { Tip } from '../guide';
 import { SoeArt } from '../illustrations';
 import { useEffect, useMemo, useState } from 'react';
-import { ArrowUpRight, BookOpen, Check, Plus, Send, Trash2 } from 'lucide-react';
+import { ArrowUpRight, BookOpen, Check, Download, Plus, Send, Trash2 } from 'lucide-react';
 import { api, uploadFile } from '@/lib/client/api';
+import { downloadSoePdf, type SoeExportRow } from '@/lib/client/soePdf';
 import { fmtDateTime } from '@/lib/time';
 import { COMPETENCIES, REVIEW_STATUSES, type SoeFull, type SoeSummary } from '@/lib/types';
 import { attempt, useHub } from '../hub';
@@ -30,6 +31,23 @@ export function Soe() {
   const shown = state.soe.filter(
     (s) => (competency === 'all' || s.competency === competency) && (candidate === 'all' || s.member_id === candidate),
   );
+  const groups = [...new Set(shown.map((s) => s.competency))]
+    .sort((a, b) => a.localeCompare(b))
+    .map((c) => ({ competency: c, records: shown.filter((s) => s.competency === c) }));
+  const [exporting, setExporting] = useState<string | null>(null);
+
+  // Everyone's SOE text as one PDF: each competency by name, then each person's levels in turn.
+  async function download(only?: string) {
+    setExporting(only ?? 'all');
+    try {
+      const rows = await api<SoeExportRow[]>('/api/soe/export');
+      await downloadSoePdf(rows, state.members, { competency: only });
+    } catch (e) {
+      hub.toast((e as Error).message || 'The PDF could not be made. Please try again.', 'error');
+    } finally {
+      setExporting(null);
+    }
+  }
 
   return (
     <>
@@ -38,9 +56,14 @@ export function Soe() {
         title="SOE register"
         text="Each candidate adds their Level 1 to 3 evidence per competency. Upload a document or photo, or paste your text. The group is notified when you submit."
         action={
-          <button className="btn primary" onClick={() => setAdding(true)}>
-            <Plus size={18} /> Add competency
-          </button>
+          <div className="row">
+            <button className="btn" onClick={() => download()} disabled={exporting !== null}>
+              <Download size={17} /> {exporting === 'all' ? 'Preparing PDF…' : 'Download PDF'}
+            </button>
+            <button className="btn primary" onClick={() => setAdding(true)}>
+              <Plus size={18} /> Add competency
+            </button>
+          </div>
         }
       />
       <Tip id="soe" art={SoeArt} title="Your statements of experience">
@@ -72,34 +95,49 @@ export function Soe() {
         </Field>
       </div>
 
-      <div className="grid three">
-        {shown.map((s) => (
-          <button key={s.id} className="card record-card" onClick={() => setOpenId(s.id)}>
-            <div className="record-top">
-              <Avatar member={member(s.member_id)} />
-              <div>
-                <strong>{name(s.member_id)}</strong>
-                <small>
-                  <span className="code">{s.member_id}</span> · {s.competency}
-                </small>
-              </div>
-              <ArrowUpRight size={18} className="muted" />
+      {groups.map(({ competency: title, records }) => (
+        <section key={title} className="soe-group">
+          <div className="soe-group-head">
+            <div>
+              <h3 className="section-title">{title}</h3>
+              <small className="muted">
+                {records.length} {records.length === 1 ? 'person' : 'people'} · {records.filter((r) => r.submitted_at).length} submitted
+              </small>
             </div>
-            <div className="levels">
-              {s.words.map((w, i) => (
-                <span key={i} className={'level-pill' + (w ? ' done' : '')}>
-                  {w ? <Check size={12} /> : null}L{i + 1}
-                </span>
-              ))}
-            </div>
-            <div className="record-foot">
-              <StatusBadge status={s.status} />
-              <span>{s.submitted_at ? questionCount(asked(s.id)) : 'Not submitted yet'}</span>
-            </div>
-            {s.member_id === me.memberId && !s.words.every((w) => w) && <span className="badge yellow">Yours · add your SOE</span>}
-          </button>
-        ))}
-      </div>
+            <button className="btn small" onClick={() => download(title)} disabled={exporting !== null}>
+              <Download size={15} /> {exporting === title ? 'Preparing…' : 'PDF'}
+            </button>
+          </div>
+          <div className="grid three">
+            {records.map((s) => (
+              <button key={s.id} className="card record-card" onClick={() => setOpenId(s.id)}>
+                <div className="record-top">
+                  <Avatar member={member(s.member_id)} />
+                  <div>
+                    <strong>{name(s.member_id)}</strong>
+                    <small>
+                      <span className="code">{s.member_id}</span> · {s.competency_type}
+                    </small>
+                  </div>
+                  <ArrowUpRight size={18} className="muted" />
+                </div>
+                <div className="levels">
+                  {s.words.map((w, i) => (
+                    <span key={i} className={'level-pill' + (w ? ' done' : '')}>
+                      {w ? <Check size={12} /> : null}L{i + 1}
+                    </span>
+                  ))}
+                </div>
+                <div className="record-foot">
+                  <StatusBadge status={s.status} />
+                  <span>{s.submitted_at ? questionCount(asked(s.id)) : 'Not submitted yet'}</span>
+                </div>
+                {s.member_id === me.memberId && !s.words.every((w) => w) && <span className="badge yellow">Yours · add your SOE</span>}
+              </button>
+            ))}
+          </div>
+        </section>
+      ))}
       {!shown.length && (
         <div className="card">
           <Empty icon={<BookOpen size={30} />}>No SOE records match these filters.</Empty>

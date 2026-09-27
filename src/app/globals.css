@@ -3002,3 +3002,20 @@ dialog.sheet::backdrop {
 .preview-image {
   border-radius: 14px;
 }
+
+/* SOE register grouped by competency */
+.soe-group {
+  margin-bottom: 40px;
+}
+
+.soe-group-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.soe-group-head .section-title {
+  margin: 0 0 4px;
+}

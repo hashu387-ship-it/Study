@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.vercel/
+.env
+.env.local
+.env*.local
+public/pdf/
+*.xlsx
+.DS_Store

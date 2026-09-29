@@ -49,6 +49,12 @@
   --glass-edge: rgb(255 255 255 / 0.75);
   --glass-blur: blur(22px) saturate(170%);
   --glass-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 40px -18px rgb(24 38 60 / 0.28);
+  --frost: 255 255 255;
+  --sheen: 255 255 255;
+  --solid: #ffffff;
+  --page-bg: linear-gradient(160deg, #eef3f9 0%, #e3ecf6 45%, #edf1f7 100%);
+  --sheet-bg: rgb(248 250 253 / 0.9);
+  --blob-opacity: 0.8;
   --r-card: 24px;
   --r-field: 14px;
   --r-pill: 9999px;
@@ -2436,7 +2442,7 @@ button.file-chip:hover {
    ========================================================================== */
 
 html {
-  background: linear-gradient(160deg, #eef3f9 0%, #e3ecf6 45%, #edf1f7 100%) fixed;
+  background: var(--page-bg) fixed;
 }
 
 html,
@@ -2463,7 +2469,7 @@ body {
   height: 26vmax;
   border-radius: 28%;
   filter: blur(6px);
-  opacity: 0.8;
+  opacity: var(--blob-opacity);
   transform: skewX(-14deg) rotate(-8deg);
   animation: drift 26s var(--ease-glide) infinite alternate;
 }
@@ -2604,7 +2610,7 @@ h3 {
 }
 
 .card.flat {
-  background: rgb(255 255 255 / 0.3);
+  background: rgb(var(--frost) / 0.3);
   box-shadow: none;
 }
 
@@ -2690,11 +2696,11 @@ h3 {
 }
 
 .nav-item:hover {
-  background: rgb(255 255 255 / 0.55);
+  background: rgb(var(--frost) / 0.55);
 }
 
 .nav-item[aria-current='page'] {
-  background: #ffffff;
+  background: var(--solid);
   color: var(--ink);
   box-shadow: 0 6px 18px -8px rgb(24 38 60 / 0.3);
 }
@@ -2702,11 +2708,11 @@ h3 {
 .me-chip {
   border-radius: var(--r-pill);
   border-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.6);
+  background: rgb(var(--frost) / 0.6);
 }
 
 .me-chip:hover {
-  background: #ffffff;
+  background: var(--solid);
 }
 
 .sidebar-foot {
@@ -2742,7 +2748,7 @@ h3 {
     gap: 2px;
     border-radius: var(--r-pill);
     border: 1px solid var(--glass-edge);
-    background: rgb(255 255 255 / 0.62);
+    background: rgb(var(--frost) / 0.62);
     -webkit-backdrop-filter: var(--glass-blur);
     backdrop-filter: var(--glass-blur);
     box-shadow: var(--glass-shadow);
@@ -2760,7 +2766,7 @@ h3 {
   }
 
   .dock button[aria-current='page'] {
-    background: #ffffff;
+    background: var(--solid);
     color: var(--ink);
     box-shadow: 0 6px 16px -8px rgb(24 38 60 / 0.35);
   }
@@ -2782,7 +2788,7 @@ h3 {
 .btn {
   border-radius: var(--r-pill);
   border-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.62);
+  background: rgb(var(--frost) / 0.62);
   font-size: 14px;
   font-weight: 600;
   letter-spacing: -0.005em;
@@ -2796,7 +2802,7 @@ h3 {
 }
 
 .btn:hover:not(:disabled) {
-  background: #ffffff;
+  background: var(--solid);
   box-shadow: 0 8px 20px -10px rgb(24 38 60 / 0.35);
 }
 
@@ -2804,7 +2810,7 @@ h3 {
 .btn.yellow {
   background: linear-gradient(180deg, #8a7349, var(--accent));
   border-color: transparent;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.25), 0 8px 20px -10px rgb(115 95 59 / 0.7);
+  box-shadow: inset 0 1px 0 rgb(var(--sheen) / 0.25), 0 8px 20px -10px rgb(115 95 59 / 0.7);
 }
 
 .btn.primary:hover:not(:disabled),
@@ -2827,11 +2833,11 @@ h3 {
 .icon-btn {
   border-radius: var(--r-pill);
   border-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.6);
+  background: rgb(var(--frost) / 0.6);
 }
 
 .icon-btn:hover {
-  background: #ffffff;
+  background: var(--solid);
 }
 
 .link-btn {
@@ -2861,21 +2867,21 @@ h3 {
   text-transform: none;
   letter-spacing: -0.005em;
   font-size: 13px;
-  background: rgb(255 255 255 / 0.55);
+  background: rgb(var(--frost) / 0.55);
   border-color: var(--glass-edge);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
 }
 
 .chip[aria-pressed='true'] {
-  background: #ffffff;
+  background: var(--solid);
   color: var(--ink);
-  border-color: #ffffff;
+  border-color: var(--solid);
   box-shadow: 0 6px 16px -8px rgb(24 38 60 / 0.3);
 }
 
 .file-chip {
-  background: rgb(255 255 255 / 0.7);
+  background: rgb(var(--frost) / 0.7);
 }
 
 .medallion {
@@ -2894,7 +2900,7 @@ h3 {
   border-radius: var(--r-field);
   border-color: var(--glass-edge);
   border-bottom-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.7);
+  background: rgb(var(--frost) / 0.7);
   box-shadow: inset 0 1px 2px rgb(24 38 60 / 0.06);
 }
 
@@ -2902,19 +2908,19 @@ h3 {
 .field select:focus-visible,
 .field textarea:focus-visible,
 .input:focus-visible {
-  background: #ffffff;
+  background: var(--solid);
   box-shadow: 0 0 0 3px rgb(158 135 93 / 0.35);
 }
 
 .field textarea:disabled {
-  background: rgb(255 255 255 / 0.4);
+  background: rgb(var(--frost) / 0.4);
 }
 
 /* Dialogs: frosted sheets over a blurred page */
 dialog.sheet {
   border-radius: 28px;
   border: 1px solid var(--glass-edge);
-  background: rgb(248 250 253 / 0.9);
+  background: var(--sheet-bg);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
 }
@@ -2933,34 +2939,34 @@ dialog.sheet::backdrop {
 .soe-level {
   border-radius: 20px;
   border-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.4);
+  background: rgb(var(--frost) / 0.4);
 }
 
 .month {
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid var(--glass-edge);
-  background: rgb(255 255 255 / 0.55);
+  background: rgb(var(--frost) / 0.55);
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow);
 }
 
 .month .dow {
-  background: rgb(255 255 255 / 0.5);
+  background: rgb(var(--frost) / 0.5);
   letter-spacing: 0.08em;
 }
 
 .table-wrap {
   border-radius: 20px;
   border: 1px solid var(--glass-edge);
-  background: rgb(255 255 255 / 0.55);
+  background: rgb(var(--frost) / 0.55);
 }
 
 .segmented {
   border-radius: var(--r-pill);
   border-color: var(--glass-edge);
-  background: rgb(255 255 255 / 0.5);
+  background: rgb(var(--frost) / 0.5);
   padding: 3px;
   gap: 2px;
 }
@@ -2984,12 +2990,12 @@ dialog.sheet::backdrop {
 .member-pick {
   border: 1px solid var(--glass-edge);
   border-radius: 18px;
-  background: rgb(255 255 255 / 0.65);
+  background: rgb(var(--frost) / 0.65);
   box-shadow: 0 6px 18px -12px rgb(24 38 60 / 0.35);
 }
 
 .member-pick:hover {
-  background: #ffffff;
+  background: var(--solid);
 }
 
 @media (max-width: 640px) {
@@ -3032,7 +3038,7 @@ dialog.sheet::backdrop {
   width: 42px;
   padding: 1px 0;
   border-radius: var(--r-pill);
-  background: rgb(255 255 255 / 0.7);
+  background: rgb(var(--frost) / 0.7);
   border: 1px solid var(--glass-edge);
   font-size: 10.5px;
   line-height: 16px;
@@ -3049,15 +3055,15 @@ dialog.sheet::backdrop {
 
 /* SOE cards: glassy green once submitted, glassy red until then */
 .record-card.is-submitted {
-  background: linear-gradient(160deg, rgb(95 174 103 / 0.26), rgb(255 255 255 / 0.5) 70%);
+  background: linear-gradient(160deg, rgb(95 174 103 / 0.26), rgb(var(--frost) / 0.5) 70%);
   border-color: rgb(95 174 103 / 0.55);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 40px -18px rgb(47 116 57 / 0.45);
+  box-shadow: inset 0 1px 0 rgb(var(--sheen) / 0.9), 0 14px 40px -18px rgb(47 116 57 / 0.45);
 }
 
 .record-card.is-pending {
-  background: linear-gradient(160deg, rgb(214 84 70 / 0.2), rgb(255 255 255 / 0.5) 70%);
+  background: linear-gradient(160deg, rgb(214 84 70 / 0.2), rgb(var(--frost) / 0.5) 70%);
   border-color: rgb(214 84 70 / 0.45);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 14px 40px -18px rgb(169 58 42 / 0.4);
+  box-shadow: inset 0 1px 0 rgb(var(--sheen) / 0.9), 0 14px 40px -18px rgb(169 58 42 / 0.4);
 }
 
 .submit-tag {
@@ -3133,9 +3139,9 @@ dialog.sheet::backdrop {
   min-width: 78px;
   padding: 12px 8px 10px;
   border-radius: 18px;
-  background: rgb(255 255 255 / 0.72);
+  background: rgb(var(--frost) / 0.72);
   border: 1px solid var(--glass-edge);
-  box-shadow: inset 0 1px 0 #ffffff, 0 8px 20px -12px rgb(24 38 60 / 0.3);
+  box-shadow: inset 0 1px 0 rgb(var(--sheen) / 1), 0 8px 20px -12px rgb(24 38 60 / 0.3);
   text-align: center;
 }
 
@@ -3191,4 +3197,100 @@ dialog.sheet::backdrop {
     font-size: 9.5px;
     letter-spacing: 0.04em;
   }
+}
+
+
+/* ==========================================================================
+   Dark theme: deep navy glass. Follows the device setting until someone picks
+   one with the sun/moon button (see the script in layout.tsx).
+   ========================================================================== */
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --canvas: rgb(255 255 255 / 0.05);
+  --surface: #0b1222;
+  --surface-raised: #16203a;
+  --surface-overlay: rgb(255 255 255 / 0.06);
+  --line: rgb(190 210 240 / 0.12);
+  --line-strong: rgb(190 210 240 / 0.3);
+  --ink: #e9eef6;
+  --ink-muted: #9ba8bc;
+  --bronze: #d3b07a;
+  --bronze-text: #e2c28e;
+  --accent: #c8a15c;
+  --on-accent: #1a1306;
+  --accent-soft: rgb(211 176 122 / 0.16);
+  --positive: #86d690;
+  --positive-soft: rgb(95 174 103 / 0.18);
+  --caution: #f2b27c;
+  --caution-soft: rgb(235 170 120 / 0.16);
+  --danger: #ff8f7d;
+  --danger-soft: rgb(214 84 70 / 0.2);
+  --shadow-overlay: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  --focus-ring: 0 0 0 2px #0b1222, 0 0 0 4px #e2c28e;
+
+  --green-ink: #8ad694;
+  --blue-ink: #8fbdf6;
+  --orange-ink: #f3bb8f;
+  --purple-ink: #c79ef6;
+
+  --frost: 26 36 62;
+  --sheen: 140 165 210;
+  --solid: #24314f;
+  --page-bg: linear-gradient(160deg, #0a1020 0%, #0e1830 45%, #0b1226 100%);
+  --sheet-bg: rgb(16 24 44 / 0.94);
+  --blob-opacity: 0.42;
+
+  --glass: rgb(22 32 58 / 0.58);
+  --glass-strong: rgb(22 32 58 / 0.85);
+  --glass-edge: rgb(150 175 220 / 0.18);
+  --glass-shadow: inset 0 1px 0 rgb(160 185 230 / 0.16), 0 18px 44px -18px rgb(0 0 0 / 0.65);
+}
+
+:root[data-theme='dark'] .blob {
+  filter: blur(18px);
+}
+
+:root[data-theme='dark'] .btn.primary,
+:root[data-theme='dark'] .btn.yellow {
+  background: linear-gradient(180deg, #d9b574, var(--accent));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 8px 22px -10px rgb(200 161 92 / 0.55);
+}
+
+:root[data-theme='dark'] .btn.primary:hover:not(:disabled),
+:root[data-theme='dark'] .btn.yellow:hover:not(:disabled) {
+  background: linear-gradient(180deg, #e3c388, #d0aa66);
+}
+
+:root[data-theme='dark'] .record-card.is-submitted {
+  background: linear-gradient(160deg, rgb(95 174 103 / 0.24), rgb(22 32 58 / 0.6) 70%);
+  border-color: rgb(95 174 103 / 0.45);
+}
+
+:root[data-theme='dark'] .record-card.is-pending {
+  background: linear-gradient(160deg, rgb(214 84 70 / 0.22), rgb(22 32 58 / 0.6) 70%);
+  border-color: rgb(214 84 70 / 0.42);
+}
+
+:root[data-theme='dark'] .countdown {
+  background:
+    linear-gradient(120deg, rgb(95 174 103 / 0.18), rgb(92 155 232 / 0.16) 35%, rgb(154 88 230 / 0.18) 70%, rgb(235 170 120 / 0.16)),
+    var(--glass);
+}
+
+:root[data-theme='dark'] dialog.sheet::backdrop {
+  background: rgb(2 6 14 / 0.6);
+}
+
+:root[data-theme='dark'] .preview-body {
+  background: rgb(8 14 28 / 0.6);
+}
+
+/* The sun/moon button eases between themes */
+.theme-toggle svg {
+  transition: transform var(--dur-base) var(--ease-quiet);
+}
+
+.theme-toggle:hover svg {
+  transform: rotate(-18deg);
 }

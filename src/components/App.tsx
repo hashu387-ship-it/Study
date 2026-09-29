@@ -22,6 +22,7 @@ import type { AppState } from '@/lib/types';
 import { HubContext, type Hub, type View } from './hub';
 import { Avatar, Sheet } from './ui';
 import { Welcome } from './Welcome';
+import { ThemeToggle } from './ThemeToggle';
 import { Overview } from './views/Overview';
 import { Announcements } from './views/Announcements';
 import { Calendar } from './views/Calendar';
@@ -237,6 +238,7 @@ export function App() {
           <header className="topbar">
             <div className="brand">Group 03</div>
             <h1>{current.label}</h1>
+            <ThemeToggle />
             <button className="icon-btn" onClick={() => go('alerts')} aria-label={`Alerts${state.unread ? `, ${state.unread} unread` : ''}`}>
               <Bell size={20} />
               {state.unread ? <span className="count">{state.unread}</span> : null}

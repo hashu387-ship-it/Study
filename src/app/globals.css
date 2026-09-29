@@ -3091,3 +3091,104 @@ dialog.sheet::backdrop {
   background: rgb(214 84 70 / 0.14);
   color: var(--danger);
 }
+
+/* Final interview countdown on Home */
+.countdown {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 28px 32px;
+  margin-bottom: 22px;
+  border-radius: var(--r-card);
+  border: 1px solid var(--glass-edge);
+  background:
+    linear-gradient(120deg, rgb(95 174 103 / 0.22), rgb(92 155 232 / 0.2) 35%, rgb(154 88 230 / 0.18) 70%, rgb(235 170 120 / 0.24)),
+    var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  animation: rise var(--dur-slow) var(--ease-quiet) both;
+}
+
+.countdown-text h3 {
+  font-size: 34px;
+  line-height: 38px;
+  margin: 6px 0 4px;
+}
+
+.countdown-text p {
+  color: var(--ink-muted);
+}
+
+.countdown-clock {
+  display: flex;
+  gap: 10px;
+}
+
+.countdown-unit {
+  min-width: 78px;
+  padding: 12px 8px 10px;
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.72);
+  border: 1px solid var(--glass-edge);
+  box-shadow: inset 0 1px 0 #ffffff, 0 8px 20px -12px rgb(24 38 60 / 0.3);
+  text-align: center;
+}
+
+.countdown-unit b {
+  display: block;
+  font-size: 34px;
+  line-height: 38px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.countdown-unit:first-child b {
+  color: var(--accent);
+}
+
+.countdown-unit span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.countdown-today {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+@media (max-width: 680px) {
+  .countdown {
+    padding: 22px 18px;
+  }
+
+  .countdown-clock {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .countdown-unit {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 2px 8px;
+  }
+
+  .countdown-unit b {
+    font-size: 26px;
+    line-height: 30px;
+  }
+
+  .countdown-unit span {
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+}

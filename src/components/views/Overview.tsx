@@ -5,6 +5,7 @@ import { fmtDate } from '@/lib/time';
 import { useHub } from '../hub';
 import { Avatar, Empty, PageHead } from '../ui';
 import { answered } from './QaPractice';
+import { FinalCountdown } from './Countdown';
 import { JoinButton, KIND_LABELS, nextWorkshop, SessionRow, SessionWhen, upcomingSessions, WORKSHOP_TARGET } from './shared';
 
 export function Overview() {
@@ -38,6 +39,8 @@ export function Overview() {
         title={`Hello, ${firstName}`}
         text="Your group's evidence, practice and sessions in one place."
       />
+
+      <FinalCountdown />
 
       <div className="grid two" style={{ marginBottom: 22 }}>
         {next ? (

@@ -25,6 +25,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en-GB" className={`${display.variable} ${sans.variable}`}>
       <body>
+        {/* Soft colour shapes that sit behind the frosted glass. */}
+        <div className="backdrop" aria-hidden="true">
+          <span className="blob green" />
+          <span className="blob blue" />
+          <span className="blob orange" />
+          <span className="blob purple" />
+        </div>
         {children}
       </body>
     </html>

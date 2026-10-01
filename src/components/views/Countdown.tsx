@@ -38,7 +38,9 @@ export function FinalCountdown() {
         <div className="countdown-clock" role="timer" aria-live="off">
           {parts.map((p, i) => (
             <div key={p.label} className="countdown-unit">
-              <b>{i === 0 ? p.value : pad(p.value)}</b>
+              <b key={p.value} className="tick">
+                {i === 0 ? p.value : pad(p.value)}
+              </b>
               <span>{p.label}</span>
             </div>
           ))}

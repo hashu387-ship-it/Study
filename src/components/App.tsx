@@ -247,7 +247,7 @@ export function App() {
             </button>
           </header>
 
-          <main className="content">
+          <main className="content" key={view}>
             {view === 'overview' && <Overview />}
             {view === 'announcements' && <Announcements />}
             {view === 'calendar' && <Calendar />}

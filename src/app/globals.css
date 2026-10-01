@@ -3198,3 +3198,148 @@ dialog.sheet::backdrop {
     letter-spacing: 0.04em;
   }
 }
+
+/* ==========================================================================
+   Motion: HyperFrames video background and in-app movement
+   ========================================================================== */
+
+.motion-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fade-in 1.2s var(--ease-quiet) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Each page glides in when you switch to it */
+.content {
+  animation: page-in 520ms var(--ease-quiet) both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.995);
+    filter: blur(4px);
+  }
+}
+
+/* Lists arrive one row after another */
+.list > * {
+  animation: rise var(--dur-slow) var(--ease-quiet) both;
+}
+
+.list > *:nth-child(2) { animation-delay: 60ms; }
+.list > *:nth-child(3) { animation-delay: 120ms; }
+.list > *:nth-child(4) { animation-delay: 180ms; }
+.list > *:nth-child(n + 5) { animation-delay: 240ms; }
+
+/* Cards lift towards you on hover */
+.card,
+.hero,
+.record-card {
+  transition: transform 420ms var(--ease-quiet), box-shadow 420ms var(--ease-quiet);
+}
+
+button.card:hover,
+.record-card:hover,
+.hero:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.9), 0 24px 50px -22px rgb(24 38 60 / 0.4);
+}
+
+/* Buttons and tabs spring when pressed */
+.btn,
+.icon-btn,
+.chip,
+.nav-item,
+.dock button,
+.segmented button,
+.member-pick {
+  transition:
+    transform 380ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background var(--dur-base) var(--ease-quiet),
+    box-shadow var(--dur-base) var(--ease-quiet),
+    color var(--dur-base) var(--ease-quiet);
+}
+
+.btn:active:not(:disabled),
+.icon-btn:active,
+.chip:active,
+.nav-item:active,
+.dock button:active,
+.segmented button:active,
+.member-pick:active {
+  transform: scale(0.95);
+  transition-duration: 90ms;
+}
+
+.nav-item[aria-current='page'],
+.dock button[aria-current='page'] {
+  animation: pill-in 480ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pill-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+}
+
+/* Countdown digits flip in as they change */
+.countdown-unit {
+  perspective: 300px;
+  overflow: hidden;
+}
+
+.countdown-unit .tick {
+  animation: flip-in 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: 50% 0;
+}
+
+@keyframes flip-in {
+  from {
+    opacity: 0;
+    transform: rotateX(-80deg) translateY(-6px);
+  }
+}
+
+/* Pop-up sheets settle in with a spring */
+dialog.sheet[open] {
+  animation: sheet-in 560ms cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content,
+  .list > *,
+  .countdown-unit .tick,
+  dialog.sheet[open],
+  .nav-item[aria-current='page'],
+  .dock button[aria-current='page'],
+  .motion-bg {
+    animation: none;
+  }
+
+  .card,
+  .hero,
+  .record-card,
+  .btn,
+  .icon-btn,
+  .chip {
+    transition: none;
+  }
+}

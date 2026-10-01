@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="./gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #edf2f8; }
+      #root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+
+      /* Light canvas, same as the app */
+      #canvas {
+        position: absolute; inset: 0;
+        background: linear-gradient(160deg, #eef3f9 0%, #e3ecf6 45%, #edf1f7 100%);
+      }
+
+      /* The four section colours as soft rounded parallelograms */
+      .blob {
+        position: absolute; width: 40vmax; height: 30vmax; border-radius: 28%;
+        filter: blur(10px); opacity: 0.85;
+      }
+      #green  { left: -12vmax; top: -14vmax;   background: linear-gradient(150deg, #7cc585, #5fae67); }
+      #blue   { right: -12vmax; top: -12vmax;  background: linear-gradient(150deg, #7db2f0, #5c9be8); }
+      #orange { left: -10vmax; bottom: -16vmax; background: linear-gradient(150deg, #f3c29b, #ebaa78); }
+      #purple { right: -10vmax; bottom: -14vmax; background: linear-gradient(150deg, #b27cf0, #9a58e6); }
+
+        position: absolute; border-radius: 4vmax;
+        background: rgb(255 255 255 / 0.32);
+        border: 2px solid rgb(255 255 255 / 0.7);
+        backdrop-filter: blur(28px) saturate(170%);
+        box-shadow: inset 0 2px 0 rgb(255 255 255 / 0.9), 0 3vmax 6vmax -3vmax rgb(24 38 60 / 0.25);
+        overflow: hidden;
+      }
+
+      /* A soft light sheen that crosses the whole frame once per loop */
+      #sheen {
+        position: absolute; top: -20%; bottom: -20%; left: 0; width: 30%;
+        background: linear-gradient(100deg, transparent 0%, rgb(255 255 255 / 0.28) 50%, transparent 100%);
+        filter: blur(20px);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="12" data-width="1920" data-height="1080">
+        <div id="canvas"></div>
+        <div class="blob" id="green" data-layout-allow-overflow></div>
+        <div class="blob" id="blue" data-layout-allow-overflow></div>
+        <div class="blob" id="orange" data-layout-allow-overflow></div>
+        <div class="blob" id="purple" data-layout-allow-overflow></div>
+        <div id="sheen" data-layout-allow-overflow></div>
+    </div>
+    <script>
+      // Every move goes out for 6 s and comes back for 6 s, so frame 0 and the last frame match
+      // and the video loops without a seam.
+      const tl = gsap.timeline({ paused: true });
+      const loop = { duration: 6, ease: "sine.inOut", yoyo: true, repeat: 1 };
+
+      tl.fromTo("#green",  { x: 0, y: 0, rotation: -8, skewX: -14, scale: 1 },    { x: "3vmax",  y: "2vmax",  rotation: -3,  skewX: -14, scale: 1.06, ...loop }, 0);
+      tl.fromTo("#blue",   { x: 0, y: 0, rotation: 6, skewX: -14, scale: 1.04 },   { x: "-3vmax", y: "2.5vmax", rotation: 10, skewX: -14, scale: 0.98, ...loop }, 0);
+      tl.fromTo("#orange", { x: 0, y: 0, rotation: 4, skewX: -14, scale: 0.98 },   { x: "2.5vmax", y: "-2vmax", rotation: -2, skewX: -14, scale: 1.05, ...loop }, 0);
+      tl.fromTo("#purple", { x: 0, y: 0, rotation: -6, skewX: -14, scale: 1 },    { x: "-2.5vmax", y: "-3vmax", rotation: -1, skewX: -14, scale: 1.07, ...loop }, 0);
+
+
+
+      // The sheen starts and ends off-screen, so it also loops cleanly.
+      tl.fromTo("#sheen", { xPercent: -120 }, { xPercent: 400, duration: 12, ease: "none" }, 0);
+
+      window.__timelines["main"] = tl;
+      tl.seek(0);
+    </script>
+  </body>
+</html>

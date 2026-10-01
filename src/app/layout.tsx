@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Instrument_Serif } from 'next/font/google';
 import './globals.css';
+import { MotionBackground } from '@/components/MotionBackground';
 
 // A clean sans for everything, with a serif italic for the one word in a title that carries it.
 const display = Instrument_Serif({ subsets: ['latin'], weight: '400', style: ['normal', 'italic'], variable: '--font-display', display: 'swap' });
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <span className="blob blue" />
           <span className="blob orange" />
           <span className="blob purple" />
+          <MotionBackground />
         </div>
         {children}
       </body>
